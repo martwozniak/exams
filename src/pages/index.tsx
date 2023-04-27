@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -14,8 +15,30 @@ const Home: NextPage = () => {
   console.log(questions.data)
   //console.log(exams.isSuccess)
   //console.log(questions.isSuccess)
-  
-  const userAnswers = 0;
+  // handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   //console.log(event.target[0].value)
+  // }
+  const userAnswers = [
+    
+  ];
+
+  const useIsCorrect = (id : string, isCorrect : boolean) : void => {
+    console.log(id)
+    console.log(isCorrect)
+    if(isCorrect==true){
+      console.log("Correct answer")
+        const correctAnswer = document.getElementById(id);
+        console.log("correctAnswer: " + " " +  correctAnswer?.classList)
+        correctAnswer?.classList.add("bg-green-500");
+    }
+  };
+
+  const handleSubmit = (event : Event) => {
+    event.preventDefault(); // Prevent form submission
+    if (!event.target) return;
+  };
+
   return (
     <>
       <Head>
@@ -27,7 +50,11 @@ const Home: NextPage = () => {
         <div className="header flex items-center justify-center text-whit py-4">
           <div className="container flex justify-between text-slate-100 px-4">
           <div>Exams ✅</div>
-          <div>List</div>
+          <div className="flex gap-2">
+            <div className="cursor-pointer">Test 1 pytanie</div>
+            <div className="cursor-pointer">Test 15 pytan</div>
+            <div className="cursor-pointer">Test 100 pytan</div>
+          </div>
           </div>
         </div>
         <div className="hero flex items-center justify-center text-whit py-4">
@@ -38,22 +65,23 @@ const Home: NextPage = () => {
           </div>
           <div className="flex justify-center">
             <div className="container">
-              <form className="formExam text-slate-50">
+              <form className="formExam text-slate-50" onSubmit={handleSubmit}>
                 {questionList?.map((q) => (
                   <div key={q.id} className="px-4 py-4 border rounded-xl my-4 mx-4">
                     <div>
                     {q.body}
                     </div>
                     {q.answers.map((a) => (
-                    <div key={a.identifier}>
-                      <input type="radio" name={q.id} value={a.identifier} id={`answer-${a.identifier}`} />
+                    <div key={a.identifier} onClick={useIsCorrect(`div-${a.identifier}`, a.isCorrect)}  id={`div-${a.identifier}`}>
+                      <input type="radio" name={q.id} value={a.identifier} id={`answer-${a.identifier}`}  className="mr-2" />
                       <label htmlFor={`answer-${a.identifier}`}>{a.body}</label>
                     </div>
                   ))}
              
-                  
                   </div>
+                  
                 ))}
+                <button className="bg-slate-900 text-slate-50 px-4 py-2 rounded-xl mt-4 mx-4" type="submit">Check your answers</button>
               </form>
             </div>
           </div>
@@ -64,27 +92,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
-
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
-  );
-};
