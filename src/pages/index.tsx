@@ -28,8 +28,13 @@ const Home: NextPage = () => {
     console.log(isCorrect)
     if(isCorrect==true){
       console.log("Correct answer")
-        const correctAnswer = document.getElementById(id);
+        const divId = "div-"+id;
+        const answerId = "answer-"+id;
+        const correctAnswer = document.getElementById(divId);
+        const answersId = document.getElementById(answerId);
+
         console.log(correctAnswer?.classList)
+      
         correctAnswer?.classList.add("bg-green-500");
     }
   };
@@ -73,7 +78,7 @@ const Home: NextPage = () => {
                     </div>
                     {q.answers.map((a) => (
                     <div key={a.identifier} onClick={
-                      () => IsCorrect(`div-${a.identifier}`, a.isCorrect)
+                      () => IsCorrect(a.identifier, a.isCorrect)
                     }  id={`div-${a.identifier}`}>
                       <input type="radio" name={q.id} value={a.identifier} id={`answer-${a.identifier}`}  className="mr-2" />
                       <label htmlFor={`answer-${a.identifier}`}>{a.body}</label>
