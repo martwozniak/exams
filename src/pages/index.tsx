@@ -33,11 +33,19 @@ const Home: NextPage = () => {
       console.log("Correct answer")
         const divId = "div-"+id;
         const answerId = "answer-"+id;
-        const correctAnswer = document.getElementById(divId);
-        const answersId = document.getElementById(answerId);
+        const correctAnswer = document.getElementById(divId) as HTMLDivElement;
+        const answersId = document.getElementById(answerId) as HTMLInputElement;
+
+        if(answerId == null) return;
 
         console.log(correctAnswer?.classList)
-        answersId.checked = true;
+        // check if have class bg-green-500
+        if(correctAnswer?.classList.contains("bg-green-500")){
+          answersId.checked = false;
+        } else {
+          answersId.checked = true;
+        }
+        
         // if input field are disabled, then do not add points
         if(!answersId.disabled) {
           userPoints++;
@@ -47,28 +55,29 @@ const Home: NextPage = () => {
       console.log("Incorrect answer")
       const divId = "div-"+id;
       const answerId = "answer-"+id;
-      const correctAnswer = document.getElementById(divId);
-      const answersId = document.getElementById(answerId);
-        if(!answersId.disabled) { 
+      const correctAnswer = document.getElementById(divId) as HTMLDivElement;
+      const answersId = document.getElementById(answerId) as HTMLInputElement;
+        if(!answersId.disabled && answersId != null) { 
           answersId.checked = true;
           correctAnswer?.classList.add("bg-red-500");
           // find correct answer add green colo
-          const correctAnswerId = "answer-"+questions.data?.find((q) => q.id == qId)?.answers.find((a) => a.isCorrect == true)?.identifier;
+          const correctAnswerId = `answer-${String(questions.data?.find((q) => q.id == qId)?.answers.find((a) => a.isCorrect == true)?.identifier)}`;
           const correctAnswerDivId = "div-"+correctAnswerId;
           const correctAnswerDiv = document.getElementById(correctAnswerDivId);
           
         }
         // find correct answer add green color
-        let correct = questionList?.find((q) => q.id == qId)?.answers.find((a) => a.isCorrect == true)?.identifier;
-        console.log("correct:" + correct)
-        let correctDiv = "div-"+correct;
+        const correct = questionList?.find((q) => q.id == qId)?.answers.find((a) => a.isCorrect == true)?.identifier;
+    
+        const correctDiv = `div-${String(correct)}`;
         const corAns = document.getElementById(correctDiv);
         corAns?.classList.add("bg-green-500");
+        (corAns as HTMLButtonElement).disabled = true;
     }
 
     // Disable other options
     answers.forEach((answer) => {
-      answer.disabled = true;
+      (answer as HTMLButtonElement).disabled = true;
     } )
   };
 
