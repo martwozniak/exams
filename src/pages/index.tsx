@@ -4,14 +4,34 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
-import { FormEvent, MouseEventHandler, useEffect } from "react";
+import { FormEvent, MouseEventHandler, useEffect, useState } from "react";
 import LoadingIndicator from "~/components/LoadingIndicator/LoadingIndicator";
+import Image from "next/image";
+import Header from "~/components/Header/Header";
+import StatsBar from "~/components/StatsBar/StatsBar";
+import toast from "react-hot-toast";
+import { MdReportProblem } from "react-icons/md";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
   // get answers related to question
   const questions = api.exam.getAllQuestionsAndAnswers.useQuery();
   const exams = api.exam.getAllExams.useQuery();
+  const duration = 60 * 1 * 1000; // 1 minutes
+  const [startTime, setStartTime] = useState(Date.now()+duration);
+  const [nowTime, setNowTime] = useState(Date.now());
+  const timeLeft = (startTime - nowTime).toLocaleString();
+  const timeOut = (Number(timeLeft) < 0.0) 
+
+  // Update timer every second
+  useEffect(() => {
+    const interval = setInterval(() => setNowTime(Date.now()), 1000);
+    return () => {
+      if(!timeOut){
+        clearInterval(interval);
+      }
+    };
+  }, []);
 
   const questionList = questions.data;
   console.log(questions.data)
@@ -25,18 +45,33 @@ const Home: NextPage = () => {
     
   ];
   // Set start timer time to now + 30 minutes
-  let userPoints = 0;
+
+  const [userPoints, setUserPoints] = useState(0);
+  const [answerCounter, setAnswerCounter] = useState(0);
+  const maxAnswers = 15;
+  const [progressPercent, setProgressPercent] = useState(0.0);
   const  IsCorrect = (id : string, isCorrect : boolean, qId: string) : (MouseEventHandler<HTMLDivElement> | void | undefined) => {
     console.log(id)
     console.log(isCorrect)
+
+
     const currentTag = "input[name="+qId+"]";
     const answers = document.querySelectorAll(currentTag);
+
+    // if answer is not disabled, then add values
+    const divId = "div-"+id;
+    const answerId = "answer-"+id;
+    const correctAnswer = document.getElementById(divId) as HTMLDivElement;
+    const answersId = document.getElementById(answerId) as HTMLInputElement;
+    if(!answersId.disabled){
+      setAnswerCounter(answerCounter+1.0)
+      setProgressPercent((answerCounter/maxAnswers)*100);
+      console.log(`Progress: ${progressPercent}%`)
+    }
+
     if(isCorrect==true){
       console.log("Correct answer")
-        const divId = "div-"+id;
-        const answerId = "answer-"+id;
-        const correctAnswer = document.getElementById(divId) as HTMLDivElement;
-        const answersId = document.getElementById(answerId) as HTMLInputElement;
+
 
         if(answerId == null) return;
 
@@ -50,15 +85,12 @@ const Home: NextPage = () => {
         
         // if input field are disabled, then do not add points
         if(!answersId.disabled) {
-          userPoints++;
+          setUserPoints(userPoints+1.0);
           correctAnswer?.classList.add("bg-green-500");
         }
     }else {
       console.log("Incorrect answer")
-      const divId = "div-"+id;
-      const answerId = "answer-"+id;
-      const correctAnswer = document.getElementById(divId) as HTMLDivElement;
-      const answersId = document.getElementById(answerId) as HTMLInputElement;
+  
         if(!answersId.disabled && answersId != null) { 
           answersId.checked = true;
           correctAnswer?.classList.add("bg-red-500");
@@ -75,6 +107,8 @@ const Home: NextPage = () => {
         const corAns = document.getElementById(correctDiv);
         corAns?.classList.add("bg-green-500");
         (corAns as HTMLButtonElement).disabled = true;
+        // setAnswerCounter(anserCounter+1.0)
+        // setProgressPercent((anserCounter/maxAnswers)*100);
     }
 
     // Disable other options
@@ -97,21 +131,13 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col bg-slate-950 text-sm main">
-        <div className="header flex items-center justify-center text-whit py-4">
-          <div className="container flex justify-between text-slate-100 px-4">
-          <div>Exams ✅</div>
-          <div className="flex gap-4 items-center text-xs">
-            <div className="cursor-pointer">Test 1 pytanie</div>
-            <div className="cursor-pointer">Test 15 pytan</div>
-            <div className="cursor-pointer">Test 100 pytan</div>
-            <button className="bg-slate-900 text-slate-50 px-4 py-2 rounded-xl" >Zaloguj sie</button>
+       
+      <Header/>
 
-          </div>
-          </div>
-        </div>
         <div className="hero flex items-center justify-center text-whit py-4">
         <div className="CTA-HERO text-slate-200 mt-24">
             <h1 className="text-6xl font-bold">Begin your niskopoziomowe journey 😊</h1>
+            <i>Make niskopoziomowe great again</i>
         </div>
   
           </div>
@@ -121,8 +147,11 @@ const Home: NextPage = () => {
                
                 {questions.isLoading ? <LoadingIndicator /> : questionList?.map((q) => (
                   <div key={q.id} className="px-4 py-4 border border-slate-800 rounded-xl my-4 mx-4">
-                    <div className="px-2 py-2">
-                    {q.body}
+                    <div className="px-2 py-2 flex justify-between">
+                      <div>{q.body}</div>
+                      <div onClick={ () => {
+                        toast("Zgloszono pytanie do moderacji")
+                      }} className="cursor-pointer text-slate-900 hover:text-slate-500 transition-all"><MdReportProblem/></div>
                     </div>
                     {q.answers.map((a) => (
                     <div key={a.identifier} onClick={
@@ -138,29 +167,17 @@ const Home: NextPage = () => {
                   
                 ))}
                 <button className="bg-slate-900 text-slate-50 px-4 py-2 rounded-xl mt-4 mx-4" >Check your answers</button>
-                    <p>Time started:</p>
               </form>
             </div>
           </div>
-        <div className="stats absolute bottom-0 left-0">
-            <div className="flex w-screen items-center p-4  gap-20 border-slate-900 border-t text-slate-700">
-                    <div className="flex gap-2 w-48">
-                      <p>Time left:</p>
-                      <p className="text-slate-300">5 min</p>
-                    </div>
-                    <div className="flex gap-2  w-24">
-                      <p>Answers:</p>
-                      <p className="text-slate-300">1/15</p>
-                    </div>
-                    <div className="flex gap-16 w-full items-center">
-                      <p>Progressbar:</p>
-                      <div className="w-full bg-gray-900 rounded-full h-2.5 dark:bg-gray-700">
-                        <div className="bg-green-600 h-2.5 rounded-full dark:bg-green-500 w-24"></div>
-                      </div>
-                      <div>24%</div>
-                    </div>
-            </div>
-        </div>
+          <StatsBar
+            timeLeft={timeLeft}
+            userPoints={userPoints}
+            maxAnswers={maxAnswers}
+            progressPercent={progressPercent}
+            answerCounter={answerCounter}
+            timeOut={timeOut}
+          />
       </main>
     </>
   );
