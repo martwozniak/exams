@@ -12,9 +12,7 @@ const Home: NextPage = () => {
   // get answers related to question
   const questions = api.exam.getAllQuestionsAndAnswers.useQuery();
   const exams = api.exam.getAllExams.useQuery();
-  if(questions.isLoading){
-    return <LoadingIndicator/>
-  }
+
   const questionList = questions.data;
   console.log(questions.data)
   //console.log(exams.isSuccess)
@@ -120,7 +118,8 @@ const Home: NextPage = () => {
           <div className="flex justify-center">
             <div className="container">
               <form className="formExam text-slate-50" onSubmit={handleSubmit}>
-                {questionList?.map((q) => (
+               
+                {questions.isLoading ? <LoadingIndicator /> : questionList?.map((q) => (
                   <div key={q.id} className="px-4 py-4 border border-slate-800 rounded-xl my-4 mx-4">
                     <div className="px-2 py-2">
                     {q.body}
@@ -133,6 +132,7 @@ const Home: NextPage = () => {
                       <label htmlFor={`answer-${a.identifier}`}>{a.body}</label>
                     </div>
                   ))}
+
              
                   </div>
                   
