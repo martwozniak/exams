@@ -4,7 +4,7 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
-import { useEffect } from "react";
+import { FormEvent, MouseEventHandler, useEffect } from "react";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -23,18 +23,18 @@ const Home: NextPage = () => {
     
   ];
 
-  const useIsCorrect = (id : string, isCorrect : boolean) : void => {
+  const  IsCorrect = (id : string, isCorrect : boolean) : (MouseEventHandler<HTMLDivElement> | void | undefined) => {
     console.log(id)
     console.log(isCorrect)
     if(isCorrect==true){
       console.log("Correct answer")
         const correctAnswer = document.getElementById(id);
-        console.log("correctAnswer: " + " " +  correctAnswer?.classList)
+        console.log(correctAnswer?.classList)
         correctAnswer?.classList.add("bg-green-500");
     }
   };
 
-  const handleSubmit = (event : Event) => {
+  const handleSubmit = (event : (FormEvent)) : void =>  {
     event.preventDefault(); // Prevent form submission
     if (!event.target) return;
   };
@@ -72,7 +72,9 @@ const Home: NextPage = () => {
                     {q.body}
                     </div>
                     {q.answers.map((a) => (
-                    <div key={a.identifier} onClick={useIsCorrect(`div-${a.identifier}`, a.isCorrect)}  id={`div-${a.identifier}`}>
+                    <div key={a.identifier} onClick={
+                      () => IsCorrect(`div-${a.identifier}`, a.isCorrect)
+                    }  id={`div-${a.identifier}`}>
                       <input type="radio" name={q.id} value={a.identifier} id={`answer-${a.identifier}`}  className="mr-2" />
                       <label htmlFor={`answer-${a.identifier}`}>{a.body}</label>
                     </div>
