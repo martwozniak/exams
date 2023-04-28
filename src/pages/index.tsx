@@ -5,12 +5,16 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
 import { FormEvent, MouseEventHandler, useEffect } from "react";
+import LoadingIndicator from "~/components/LoadingIndicator/LoadingIndicator";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
   // get answers related to question
   const questions = api.exam.getAllQuestionsAndAnswers.useQuery();
   const exams = api.exam.getAllExams.useQuery();
+  if(questions.isLoading){
+    return <LoadingIndicator/>
+  }
   const questionList = questions.data;
   console.log(questions.data)
   //console.log(exams.isSuccess)
