@@ -58,8 +58,14 @@ const Home: NextPage = () => {
           const correctAnswerDiv = document.getElementById(correctAnswerDivId);
           
         }
-
+        // find correct answer add green color
+        let correct = questionList?.find((q) => q.id == qId)?.answers.find((a) => a.isCorrect == true)?.identifier;
+        console.log("correct:" + correct)
+        let correctDiv = "div-"+correct;
+        const corAns = document.getElementById(correctDiv);
+        corAns?.classList.add("bg-green-500");
     }
+
     // Disable other options
     answers.forEach((answer) => {
       answer.disabled = true;
