@@ -136,7 +136,25 @@ const Home: NextPage = () => {
               </form>
             </div>
           </div>
-
+        <div className="stats absolute bottom-0 left-0">
+            <div className="flex w-screen items-center p-4  gap-20 border-slate-900 border-t text-slate-700">
+                    <div className="flex gap-2 w-48">
+                      <p>Time left:</p>
+                      <p className="text-slate-300">5 min</p>
+                    </div>
+                    <div className="flex gap-2  w-24">
+                      <p>Answers:</p>
+                      <p className="text-slate-300">1/15</p>
+                    </div>
+                    <div className="flex gap-16 w-full items-center">
+                      <p>Progressbar:</p>
+                      <div className="w-full bg-gray-900 rounded-full h-2.5 dark:bg-gray-700">
+                        <div className="bg-green-600 h-2.5 rounded-full dark:bg-green-500 w-24"></div>
+                      </div>
+                      <div>24%</div>
+                    </div>
+            </div>
+        </div>
       </main>
     </>
   );
