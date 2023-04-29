@@ -11,6 +11,7 @@ import Header from "~/components/Header/Header";
 import StatsBar from "~/components/StatsBar/StatsBar";
 import toast from "react-hot-toast";
 import { MdReportProblem } from "react-icons/md";
+import ResultPopover from "~/components/ResultPopover/ResultPopover";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -53,6 +54,8 @@ const Home: NextPage = () => {
   const [examStarted, setExamStarted] = useState(false);
   const [examFinished, setExamFinished] = useState(false);
   const [examId, setExamId] = useState(""); 
+  const answerToken = "tkn";
+
   const  IsCorrect = (id : string, isCorrect : boolean, qId: string) : (MouseEventHandler<HTMLDivElement> | void | undefined) => {
     console.log(id)
     console.log(isCorrect)
@@ -60,7 +63,6 @@ const Home: NextPage = () => {
 
     const currentTag = "input[name="+qId+"]";
     const answers = document.querySelectorAll(currentTag);
-
     // if answer is not disabled, then add values
     const divId = "div-"+id;
     const answerId = "answer-"+id;
@@ -79,6 +81,7 @@ const Home: NextPage = () => {
       if(tempProgressPercent == 100.0){
         toast.success("You have completed the exam, congratulations! 🎉");
         // Show results
+        setExamFinished(true);
       }
     
     }
@@ -137,6 +140,20 @@ const Home: NextPage = () => {
     event.preventDefault(); // Prevent form submission
     if (!event.target) return;
   };
+
+  if(examFinished){
+    return <ResultPopover 
+      title="Exam results"
+      description="You have completed the exam, congratulations! 🎉"
+      points={userPoints}
+      maxPoints={Number(maxAnswers)}
+      examId={examId}
+      token={answerToken}
+      timeLeft="0"
+      timeOut={true}
+      answerCounter={answerCounter}
+      />;
+  }
 
   return (
     <>
