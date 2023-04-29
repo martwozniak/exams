@@ -34,8 +34,11 @@ const Home: NextPage = () => {
     };
   }, []);
 
+  
   const questionList = questions.data;
-  console.log(questions?.data)
+  // Log all questions to console
+  //console.log(questions?.data)
+  
   //console.log(exams.isSuccess)
   //console.log(questions.isSuccess)
   // handleSubmit = (event) => {
@@ -57,8 +60,8 @@ const Home: NextPage = () => {
   const answerToken = "tkn";
 
   const  IsCorrect = (id : string, isCorrect : boolean, qId: string) : (MouseEventHandler<HTMLDivElement> | void | undefined) => {
-    console.log(id)
-    console.log(isCorrect)
+    //console.log(id)
+    //console.log(isCorrect)
 
 
     const currentTag = "input[name="+qId+"]";
@@ -88,12 +91,12 @@ const Home: NextPage = () => {
     
 
     if(isCorrect==true){
-      console.log("Correct answer")
+      //console.log("Correct answer")
 
 
         if(answerId == null) return;
 
-        console.log(correctAnswer?.classList)
+        //console.log(correctAnswer?.classList)
         // check if have class bg-green-500
         if(correctAnswer?.classList.contains("bg-green-500")){
           answersId.checked = false;
@@ -107,7 +110,7 @@ const Home: NextPage = () => {
           correctAnswer?.classList.add("bg-green-500");
         }
     }else {
-      console.log("Incorrect answer")
+      //console.log("Incorrect answer")
   
         if(!answersId.disabled && answersId != null) { 
           answersId.checked = true;
