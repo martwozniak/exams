@@ -21,6 +21,8 @@ export const questionRouter = createTRPCRouter({
   reportIssue: publicProcedure
   .input(z.object({ id: z.string() }))
   .mutation((opts) => {
+    // Increase the reportIssue field by 1
+    
     // Here some login stuff would happen
     // Find question with id and update the reportIssue field
     

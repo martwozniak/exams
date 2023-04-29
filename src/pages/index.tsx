@@ -141,19 +141,6 @@ const Home: NextPage = () => {
     if (!event.target) return;
   };
 
-  if(examFinished){
-    return <ResultPopover 
-      title="Exam results"
-      description="You have completed the exam, congratulations! 🎉"
-      points={userPoints}
-      maxPoints={Number(maxAnswers)}
-      examId={examId}
-      token={answerToken}
-      timeLeft="0"
-      timeOut={true}
-      answerCounter={answerCounter}
-      />;
-  }
 
   return (
     <>
@@ -165,7 +152,7 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col bg-slate-950 text-sm main">
        
       <Header/>
-
+      
         <div className="hero flex items-center justify-center text-whit py-4">
         <div className="CTA-HERO text-slate-200 mt-24">
             <h1 className="text-6xl font-bold">Begin your niskopoziomowe journey 😊</h1>
@@ -202,6 +189,18 @@ const Home: NextPage = () => {
               </form>
             </div>
           </div>
+          {examFinished ? <ResultPopover 
+              title="Exam results"
+              description="You have completed the exam, congratulations! 🎉"
+              points={userPoints}
+              maxPoints={Number(maxAnswers)}
+              examId={examId}
+              token={answerToken}
+              timeLeft="0"
+              timeOut={true}
+              answerCounter={answerCounter}
+              /> : <></>
+              }
           <StatsBar
             timeLeft={timeLeft}
             userPoints={userPoints}
