@@ -34,7 +34,7 @@ const Home: NextPage = () => {
   }, []);
 
   const questionList = questions.data;
-  console.log(questions.data)
+  console.log(questions?.data)
   //console.log(exams.isSuccess)
   //console.log(questions.isSuccess)
   // handleSubmit = (event) => {
@@ -48,7 +48,7 @@ const Home: NextPage = () => {
 
   const [userPoints, setUserPoints] = useState(0);
   const [answerCounter, setAnswerCounter] = useState(0);
-  const maxAnswers = 15;
+  const maxAnswers = questionList?.length;
   const [progressPercent, setProgressPercent] = useState(0.0);
   const  IsCorrect = (id : string, isCorrect : boolean, qId: string) : (MouseEventHandler<HTMLDivElement> | void | undefined) => {
     console.log(id)
