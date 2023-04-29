@@ -14,11 +14,11 @@ export default function Header() {
             </Link>
           </div>
 
-          <div className="flex gap-2 sm:gap-4 items-center text-xs">
-            <div className="cursor-pointer">Test 1 pytanie</div>
-            <div className="cursor-pointer">Test 15 pytan</div>
-            <div className="cursor-pointer">Test 100 pytan</div>
-            <button className="bg-slate-900 text-slate-50 px-4 py-2 rounded-xl" >Zaloguj sie</button>
+          <div className="flex gap-2 sm:gap-4 items-center text-xs transition-all text-slate-400 ">
+            <div className="cursor-pointer transition-all hover:text-slate-50">Test 1 pytanie</div>
+            <div className="cursor-pointer transition-all hover:text-slate-50">Test 15 pytan</div>
+            <div className="cursor-pointer transition-all hover:text-slate-50">Test 100 pytan</div>
+            <button className="bg-slate-900 text-slate-100 px-4 py-2 rounded-xl transition-all hover:bg-slate-800 hover:text-slate-50" >Zaloguj sie</button>
           </div>
         </div>
       </div>
