@@ -24,23 +24,23 @@ export default function StatsBar({answerCounter, maxAnswers, userPoints, progres
      <div className="stats flex  bottom-0 left-0 z-50 bg-slate-950 fixed">
             <div className="flex w-screen items-center p-4  gap-4 sm:gap-20 border-slate-900 border-t text-slate-700 text-xs sm:text-sm">
                     <div className="hidden sm:flex gap-2 w-24 sm:w-64 items-center">
-                      <div><MdOutlineDateRange/></div>
+                      <div><MdOutlineDateRange className='text-xl'/></div>
                       <p className="text-slate-300">24-04-2023</p>
                     </div>
                     <div className="flex gap-2 w-24 items-center">
-                      <div><MdBrowseGallery/></div>
+                      <div><MdBrowseGallery className='text-xl'/></div>
                       <p className="text-slate-300">{timeOut ? "Time left" : timeLeft}</p>
                     </div>
                     <div className="flex gap-2  w-14 items-center">
-                      <div><MdOutlineIncompleteCircle/></div>
+                      <div><MdOutlineIncompleteCircle className='text-xl'/></div>
                       <p className="text-slate-300">{answerCounter}/{maxAnswers}</p>
                     </div>
-                    <div className="flex gap-2  w-14 items-center">
-                     <div><MdLocalFireDepartment/> </div>
+                    <div className="flex gap-2 hidden w-14 items-center">
+                     <div><MdLocalFireDepartment className='text-xl'/> </div>
                       <p className="text-slate-300">0</p>
                     </div>
                     <div className="flex gap-2  w-12 items-center">
-                     <div><MdOutlineDiamond/> </div>
+                     <div><MdOutlineDiamond className='text-xl'/> </div>
                       <p className="text-slate-300">{userPoints}</p>
                     </div>
 
