@@ -49,13 +49,14 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
+    id                             String                           @id @default(cuid())
+    name                           String?
+    email                          String?                          @unique
+    emailVerified                  DateTime?
+    image                          String?
+    accounts                       Account[]
+    sessions                       Session[]
+    SavedExamQuestonAndUserAnswers SavedExamQuestonAndUserAnswers[]
 }
 
 model VerificationToken {
@@ -77,23 +78,36 @@ model Exam {
 }
 
 model Question {
-    id        String   @id @default(cuid())
-    body      String
-    answers   Answer[]
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    examId    String
-    exam      Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+    id                             String                           @id @default(cuid())
+    body                           String
+    answers                        Answer[]
+    createdAt                      DateTime                         @default(now())
+    updatedAt                      DateTime                         @updatedAt
+    examId                         String
+    exam                           Exam                             @relation(fields: [examId], references: [id], onDelete: Cascade)
+    SavedExamQuestonAndUserAnswers SavedExamQuestonAndUserAnswers[]
 }
 
 model Answer {
-    identifier  String   @id @default(cuid())
-    body        String
-    questionId  String
-    answerCount Int      @default(0)
-    question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-    isCorrect   Boolean  @default(false)
-    reportCount Int      @default(0)
+    identifier                     String                           @id @default(cuid())
+    body                           String
+    questionId                     String
+    answerCount                    Int                              @default(0)
+    question                       Question                         @relation(fields: [questionId], references: [id], onDelete: Cascade)
+    isCorrect                      Boolean                          @default(false)
+    reportCount                    Int                              @default(0)
+    SavedExamQuestonAndUserAnswers SavedExamQuestonAndUserAnswers[]
 
     @@unique([identifier])
+}
+
+model SavedExamQuestonAndUserAnswers {
+    id         String   @id @default(cuid())
+    sessionId  String
+    questionId String
+    answerId   String
+    userId     String
+    question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+    answer     Answer   @relation(fields: [answerId], references: [identifier], onDelete: Cascade)
+    user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
