@@ -50,6 +50,9 @@ const Home: NextPage = () => {
   const [answerCounter, setAnswerCounter] = useState(0);
   const maxAnswers = questionList?.length;
   const [progressPercent, setProgressPercent] = useState(0.0);
+  const [examStarted, setExamStarted] = useState(false);
+  const [examFinished, setExamFinished] = useState(false);
+  const [examId, setExamId] = useState(""); 
   const  IsCorrect = (id : string, isCorrect : boolean, qId: string) : (MouseEventHandler<HTMLDivElement> | void | undefined) => {
     console.log(id)
     console.log(isCorrect)
@@ -63,11 +66,23 @@ const Home: NextPage = () => {
     const answerId = "answer-"+id;
     const correctAnswer = document.getElementById(divId) as HTMLDivElement;
     const answersId = document.getElementById(answerId) as HTMLInputElement;
+
     if(!answersId.disabled){
-      setAnswerCounter(answerCounter+1.0)
-      setProgressPercent((answerCounter/maxAnswers)*100);
+      const tempAnswerCounter = answerCounter+1.0;
+      const tempProgressPercent = (Number(tempAnswerCounter)/Number(maxAnswers))*100;
+      setProgressPercent(tempProgressPercent);
+      console.log(`Answer counter: ${Number(answerCounter)}`)
+      console.log(`Max answers: ${Number(maxAnswers)}`)
       console.log(`Progress: ${progressPercent}%`)
+      setAnswerCounter(tempAnswerCounter)
+
+      if(tempProgressPercent == 100.0){
+        toast.success("You have completed the exam, congratulations! 🎉");
+        // Show results
+      }
+    
     }
+    
 
     if(isCorrect==true){
       console.log("Correct answer")
@@ -110,11 +125,11 @@ const Home: NextPage = () => {
         // setAnswerCounter(anserCounter+1.0)
         // setProgressPercent((anserCounter/maxAnswers)*100);
     }
-
     // Disable other options
     answers.forEach((answer) => {
       (answer as HTMLButtonElement).disabled = true;
     } )
+    
   };
 
 
@@ -173,7 +188,7 @@ const Home: NextPage = () => {
           <StatsBar
             timeLeft={timeLeft}
             userPoints={userPoints}
-            maxAnswers={maxAnswers}
+            maxAnswers={Number(maxAnswers)}
             progressPercent={progressPercent}
             answerCounter={answerCounter}
             timeOut={timeOut}
