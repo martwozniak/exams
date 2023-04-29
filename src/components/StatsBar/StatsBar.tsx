@@ -45,7 +45,7 @@ export default function StatsBar({answerCounter, maxAnswers, userPoints, progres
                     </div>
 
                     <div className="flex gap-2 sm:gap-16 w-full items-center">
-                      <p className='hidden sm:flex'>Progress</p>
+            
                       <div className="w-full bg-gray-900 rounded-full h-2.5 dark:bg-gray-700">
                         <div className={`bg-green-600 h-2.5 rounded-full dark:bg-green-500 progressbar`} style={{width:`${Number(progressPercent.toFixed(0))}`+"%"}}></div>
                       </div>
