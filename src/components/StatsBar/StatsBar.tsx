@@ -21,7 +21,7 @@ export default function StatsBar({answerCounter, maxAnswers, userPoints, progres
   const cla = "w-[15%]" 
   return (
     <>
-     <div className="stats flex sm:sticky bottom-0 left-0 z-50 bg-slate-950 fixed">
+     <div className="stats flex  bottom-0 left-0 z-50 bg-slate-950 fixed">
             <div className="flex w-screen items-center p-4  gap-4 sm:gap-20 border-slate-900 border-t text-slate-700 text-xs sm:text-sm">
                     <div className="hidden sm:flex gap-2 w-24 sm:w-64 items-center">
                       <div><MdOutlineDateRange/></div>

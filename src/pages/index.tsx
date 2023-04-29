@@ -150,11 +150,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col bg-slate-950 text-sm main">
-       
+       <div className="blur-wrapper">
       <Header/>
       
         <div className="hero flex items-center justify-center text-white py-4">
-        <div className="CTA-HERO text-slate-200 mt-0 sm:mt-24 mx-4 sm:mx-0">
+        <div className="CTA-HERO text-slate-200 mt-0 sm:mt-8 mx-4 sm:mx-0">
             <h1 className="text-2xl sm:text-6xl font-bold">Begin your niskopoziomowe journey 😊</h1>
             <i>Make niskopoziomowe great again</i>
         </div>
@@ -189,7 +189,17 @@ const Home: NextPage = () => {
               </form>
             </div>
           </div>
-          {examFinished ? <ResultPopover 
+         
+          <StatsBar
+            timeLeft={timeLeft}
+            userPoints={userPoints}
+            maxAnswers={Number(maxAnswers)}
+            progressPercent={progressPercent}
+            answerCounter={answerCounter}
+            timeOut={timeOut}
+          />
+          </div>
+           {examFinished ? <ResultPopover 
               title="Exam results"
               description="You have completed the exam, congratulations! 🎉"
               points={userPoints}
@@ -201,15 +211,8 @@ const Home: NextPage = () => {
               answerCounter={answerCounter}
               /> : <></>
               }
-          <StatsBar
-            timeLeft={timeLeft}
-            userPoints={userPoints}
-            maxAnswers={Number(maxAnswers)}
-            progressPercent={progressPercent}
-            answerCounter={answerCounter}
-            timeOut={timeOut}
-          />
       </main>
+      
     </>
   );
 };
