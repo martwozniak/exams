@@ -35,6 +35,14 @@ export const questionRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.question.findMany();
   }),
+  getOne: publicProcedure.input(z.object({ slug: z.string()})).query(({ ctx, input }) => {
+    const slug = input.slug;
+    return ctx.prisma.question.findUnique({
+      where: { id: slug },
+      include: {answers: true},
+    });
+
+  }),
   reportQuestionIssue: publicProcedure
   .input(z.object({ reportedQuestionId: z.string(), token: z.string() }))
   .mutation(async ({ ctx, input }) => {
