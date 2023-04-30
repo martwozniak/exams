@@ -2,7 +2,7 @@ import React from 'react'
 import Header from '../Header/Header';
 import { MdBrowseGallery, MdOutlineIncompleteCircle, MdContentCopy, MdOutlineDiamond,MdLocalFireDepartment, MdOutlineDateRange, MdIncompleteCircle } from "react-icons/md";
 import toast from "react-hot-toast";
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Sector, Cell, ResponsiveContainer, AreaChart, XAxis, CartesianGrid, Tooltip, YAxis, Area, BarChart, Legend, Bar } from 'recharts';
 
 type Props = {
     title: string;
@@ -87,7 +87,17 @@ export default function ResultPopover({title,description, points, maxPoints, tim
               </div>
               </div>
               <div className='mx-2 mt-6'>
-              <span>Share your results</span>
+              <span>Statistics</span>
+              <div className='flex gap-4 flex-col sm:flex-row'>
+              <BarChart width={230} height={250} data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+ 
+  
+              <Bar dataKey="value" fill="#475569" />
+              </BarChart>
+
               <PieChart width={200} height={200} >
                 <Pie
                   data={data}
@@ -102,10 +112,26 @@ export default function ResultPopover({title,description, points, maxPoints, tim
                   {data.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
-                </Pie>
-                
+                </Pie> 
               </PieChart>
               
+           
+              <div className='w-full'>
+                <table className='flex gap-2 flex-col w-full'>
+                  <tr className='text-green-600 flex justify-between'>
+                    <td>Correct</td>
+                    <td className='font-bold'>{points}</td>
+                  </tr>
+                  <tr className='text-red-600 flex justify-between'>
+                    <td>Wrong</td>
+                    <td className='font-bold'>{wrong}</td>
+                  </tr>
+
+                </table>
+              </div>
+              </div>
+
+
               </div>
              
             </div>
