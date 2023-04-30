@@ -6,27 +6,25 @@ const ALPHABET = ["A","B","C", "D", "E", "F", "G", "H", "I", "J", "K"];
 export default function ShowSingleQuestion() {
 
   const router = useRouter();
-  const identifier = router?.query?.id?.toString();
-  console.log(identifier);
-  const [correctAnswerID, setCorrectAnswerID] = useState("");
+  const identifier = router.query.id! as string;
+  const singleQuestionQuery = api.question.getOne.useQuery({ slug: identifier });
 
-  if(!identifier) {return null}
 
-  const findCorrect = () => {
-    singleQuestionQuery?.data?.answers.map((a) => {
-      if(a.isCorrect) {
-        setCorrectAnswerID(a.identifier);
-      }
-    })
-  }
-
-  const highlightCorrect = () => {
-    const correctAnswer = document.getElementById(`div-${correctAnswerID}`);
+  const highlightCorrect = (correctId : string) => {
+    const correctAnswer = document.getElementById(`div-${correctId}`);
     correctAnswer?.classList.add("bg-green-500");
   }
 
-  const singleQuestionQuery = api.question.getOne.useQuery({ slug: identifier });
-  console.log(singleQuestionQuery.data);
+  console.log(singleQuestionQuery?.data);
+
+
+  const findCorrect = ()  => {
+    singleQuestionQuery.data?.answers?.map((a) => {
+      if(a.isCorrect) {
+        highlightCorrect(a.identifier);
+      }
+    })
+  }
 
   return (
     <div className='bg-slate-950 min-h-screen text-slate-200 px-4'>
@@ -42,10 +40,8 @@ export default function ShowSingleQuestion() {
                   ))}
           <button className='bg-slate-800 text-slate-200 px-4 py-2 rounded-xl' onClick={
              () => {
-              findCorrect();
-              highlightCorrect();
-            }
-          }>Show correct answer</button>
+                 findCorrect()          
+              }}>Show correct answer</button>
           </div>
 
       </div>
