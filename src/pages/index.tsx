@@ -152,10 +152,13 @@ const Home: NextPage = () => {
     if (!event.target) return;
   };
   
-  const { mutate, isLoading: isSendingQuestionIssueReport, } = api.question.reportQuestionIssue.useMutation(
+  const { mutate, isLoading: isSendingQuestionIssueReport } = api.question.reportQuestionIssue.useMutation(
     {
       onSuccess : () => {
       toast.success("Thank you for your feedback! 😊");
+    },
+    onError : () => {
+      toast.error("Something went wrong, please try again later 😢");
     }
   }
   );
