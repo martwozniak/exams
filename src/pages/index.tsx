@@ -258,7 +258,7 @@ const Home: NextPage = () => {
             }
             </div>
           </div>
-         
+
           <StatsBar
             timeLeft={timeLeft}
             timeStarted={startTime}
@@ -277,5 +277,4 @@ const Home: NextPage = () => {
     </>
   );
 };
-
 export default Home;
