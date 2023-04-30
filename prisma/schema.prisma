@@ -86,6 +86,7 @@ model Question {
     examId                         String
     exam                           Exam                             @relation(fields: [examId], references: [id], onDelete: Cascade)
     SavedExamQuestonAndUserAnswers SavedExamQuestonAndUserAnswers[]
+    reportCount                    Int                              @default(0)
 }
 
 model Answer {

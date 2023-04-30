@@ -18,16 +18,20 @@ export const questionRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.question.findMany();
   }),
-  // reportIssue: publicProcedure
-  // .input(z.object({ id: z.string() }))
-  // .mutation(async ({ ctx }) => {
-  //   const input = ctx.body;
-  //   const question = await ctx.prisma.question.findUnique({
-  //     where: { id: input.id },
-  //   });
-  //   //question?.update({ data: { reported: true } });
-  //   return `You reported issue with id ${input.id}`;
-  // }),
+  reportQuestionIssue: publicProcedure
+  .input(z.object({ reportedQuestionId: z.string() }))
+  .mutation(async ({ ctx, input }) => {
+    //console.log("API call value of reportedQuestionId: ", input.reportedQuestionId)
+    const repQId = input.reportedQuestionId;
+    const question = await ctx.prisma.question.update({
+      where: { id: repQId },
+      data: {
+        reportCount: {increment: 1},
+      },
+    });
+
+    return question;
+  }),
 
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";

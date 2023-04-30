@@ -143,8 +143,9 @@ const Home: NextPage = () => {
     event.preventDefault(); // Prevent form submission
     if (!event.target) return;
   };
-
-
+  
+  const { mutate } = api.question.reportQuestionIssue.useMutation();
+  
   return (
     <>
       <Head>
@@ -172,6 +173,7 @@ const Home: NextPage = () => {
                     <div className="px-2 py-2 flex justify-between">
                       <div>{q.body}</div>
                       <div onClick={ () => {
+                        const issueReportResult = mutate({reportedQuestionId: q.id})
                         toast("Zgloszono pytanie do moderacji")
                       }} className="cursor-pointer text-slate-900 hover:text-slate-500 transition-all"><MdReportProblem/></div>
                     </div>
