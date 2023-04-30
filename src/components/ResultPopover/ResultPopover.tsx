@@ -89,16 +89,15 @@ export default function ResultPopover({title,description, points, maxPoints, tim
               <div className='mx-2 mt-6'>
               <span>Statistics</span>
               <div className='flex gap-4 flex-col sm:flex-row'>
-              <BarChart width={230} height={250} data={data}>
+              <BarChart width={230} height={250} data={data} >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
- 
-  
               <Bar dataKey="value" fill="#475569" />
+
               </BarChart>
 
-              <PieChart width={200} height={200} >
+              <PieChart width={200} height={200}>
                 <Pie
                   data={data}
                   cx={100}
