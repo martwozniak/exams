@@ -3,6 +3,7 @@ import Header from '../Header/Header';
 import { MdBrowseGallery, MdOutlineIncompleteCircle, MdContentCopy, MdOutlineDiamond,MdLocalFireDepartment, MdOutlineDateRange, MdIncompleteCircle } from "react-icons/md";
 import toast from "react-hot-toast";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, AreaChart, XAxis, CartesianGrid, Tooltip, YAxis, Area, BarChart, Legend, Bar } from 'recharts';
+import dayjs from 'dayjs';
 
 type Props = {
     title: string;
@@ -14,6 +15,8 @@ type Props = {
     answerCounter: number;
     examId: string;
     token: string;
+    timeStarted: number;
+    timeEnded: number;
 }
 // TODO: Different messages for different results
 // TODO: Different gif for different results
@@ -21,7 +24,7 @@ type Props = {
 // TODO: If not logged in show CTA to create account or log in
 
 
-export default function ResultPopover({title,description, points, maxPoints, timeLeft, timeOut, answerCounter, examId, token}: Props) {
+export default function ResultPopover({title,description, points, maxPoints, timeLeft, timeOut, answerCounter, examId, token, timeStarted, timeEnded}: Props) {
   const wrong = maxPoints - points;
   const data = [
     { name: 'Correct', value: Number(points), color: "green" },
@@ -46,18 +49,18 @@ export default function ResultPopover({title,description, points, maxPoints, tim
                 </div>
                 <div className='flex flex-col gap-2'>
                   <span className='font-bold'>Time started</span>
-                  <span className='font-bold'>{examId}</span>
+                  <span className='font-bold'>{dayjs(timeStarted).format()}</span>
                 </div>
                 <div className='flex flex-col gap-2 '>
                   <span className='font-bold'>Time ended</span>
-                  <span className='font-bold'>{examId}</span>
+                  <span className='font-bold'>{dayjs(timeEnded).format()}</span>
                 </div>
               </div>
 
               <div className='border mt-8 rounded-xl border-slate-800 flex justify-around gap-4 py-8 py-4'>
                 <div className='flex flex-col justify-center items-center'>
                 <MdBrowseGallery className='text-xl'/>
-                  <span className='text-xl sm:text-3xl  font-bold'>{timeLeft}</span>
+                  <span className='text-xl sm:text-3xl  font-bold'>{dayjs(timeEnded-timeStarted).format("mm:ss")}</span>
                 </div>
                 <div className='flex flex-col justify-center items-center'>
                 <MdIncompleteCircle className='text-xl'/>
@@ -76,12 +79,13 @@ export default function ResultPopover({title,description, points, maxPoints, tim
               <div className='mx-2 mt-6'>
               <span>Share your results</span>
               <div className='flex gap-2 mt-2 border border-slate-900 rounded-xl w-full bg-slate-900 py-2 px-2 justify-between items-center'>
-                  <span>link</span>
+                  <div className='text-slate-500'>https://website-host-env-variable.com/results/<span className='text-slate-50'>{`${examId}`}</span></div>
                   <MdContentCopy className='cursor-pointer' onClick={() => {
-                    console.log('copy')
-                    toast.success('Copied to clipboard')
-                    // Copy to clipboard
-                    // Show toast
+                    async () => {
+                      const results = await navigator.clipboard.writeText(`https://website-host-env-variable.com/results/${examId}`).then(() => { return true }).catch(() => { return false })
+                      console.log('copy')
+                      toast.success('Copied to clipboard')
+                    }
                   }}/>
                
               </div>

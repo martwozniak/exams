@@ -12,6 +12,10 @@ import StatsBar from "~/components/StatsBar/StatsBar";
 import toast from "react-hot-toast";
 import { MdReportProblem } from "react-icons/md";
 import ResultPopover from "~/components/ResultPopover/ResultPopover";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -19,28 +23,22 @@ const Home: NextPage = () => {
   const questions = api.exam.getAllQuestionsAndAnswers.useQuery();
   const exams = api.exam.getAllExams.useQuery();
   const duration = 60 * 1 * 1000; // 1 minutes
-  const [startTime, setStartTime] = useState(Date.now()+duration);
+  const [startTime, setStartTime] = useState(Date.now());
+  const [endTime, setEndTime] = useState(Date.now()+duration);
+
   const [nowTime, setNowTime] = useState(Date.now());
-  const timeLeft = (startTime - nowTime).toLocaleString();
+  const timeLeft = (startTime - nowTime);
   const timeOut = (Number(timeLeft) < 0.0) 
   const [examDuration, setExamDuration] = useState(duration);
   const [examToken, setExamToken] = useState("");
   
-  // Update timer every second
-  useEffect(() => {
-    const interval = setInterval(() => setNowTime(Date.now()), 1000);
-    return () => {
-      if(!timeOut){
-        clearInterval(interval);
-      }
-    };
-  }, []);
-
   // useEffect one time after site is loaded
   useEffect(() => {
     const examToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     localStorage.setItem("examToken", examToken);
     setExamToken(localStorage.getItem("examToken") || "");
+    // starting time
+    const setStartTime = dayjs();
   }, []);
 
   const questionList = questions.data;
@@ -213,6 +211,7 @@ const Home: NextPage = () => {
          
           <StatsBar
             timeLeft={timeLeft}
+
             userPoints={userPoints}
             maxAnswers={Number(maxAnswers)}
             progressPercent={progressPercent}
@@ -229,6 +228,8 @@ const Home: NextPage = () => {
               token={answerToken}
               timeLeft="0"
               timeOut={true}
+              timeStarted={startTime}
+              timeEnded={endTime}
               answerCounter={answerCounter}
               /> : <></>
               }
