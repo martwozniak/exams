@@ -12,25 +12,24 @@ type Props = {
     userPoints: number;
     progressPercent: number;
     timeOut: boolean;
-    timeLeft: string;
-    timeStarted: Date;
+    timeLeft: number;
+    timeStarted: number;
 }
 
 export default function StatsBar({answerCounter, maxAnswers, userPoints, progressPercent, timeOut, timeLeft, timeStarted}: Props) {
-  const [currentTime, setCurrentTime] = React.useState(Date.now());
  
   console.log(timeLeft)
   return (
     <>
-     <div className="stats flex  bottom-0 left-0 z-50 bg-slate-950 fixed">
-            <div className="flex w-screen items-center p-4  gap-4 sm:gap-20 border-slate-900 border-t text-slate-700 text-xs sm:text-sm">
+     <div className="stats flex  bottom-0 left-0 z-50 bg-slate-950 fixed w-full justify-center">
+            <div className="flex container items-center p-4  gap-4 sm:gap-20 border-slate-900 border rounded-xl text-slate-700 text-xs sm:text-sm">
                     <div className="hidden sm:flex gap-2 w-24 sm:w-64 items-center">
                       <div><MdOutlineDateRange className='text-xl'/></div>
                       <p className="text-slate-300 w-max">{`${dayjs(new Date()).format("MM-DD-YYYY")}`}</p>
                     </div>
                     <div className="flex gap-2 w-24 items-center w-fit">
                       <div><MdBrowseGallery className='text-xl'/></div>
-                      <p className="text-slate-300 w-max">{`${dayjs(timeLeft).fromNow()}`}</p>
+                      <p className="text-slate-300 w-max">{`${dayjs(timeLeft).format("mm:ss")}`}</p>
                     </div>
                     <div className="flex gap-2  w-14 items-center">
                       <div><MdOutlineIncompleteCircle className='text-xl'/></div>

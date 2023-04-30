@@ -10,13 +10,14 @@ type Props = {
     description: string;
     points: number;
     maxPoints: number;
-    timeLeft: string;
+    timeLeft: number;
     timeOut: boolean;
     answerCounter: number;
     examId: string;
     token: string;
     timeStarted: number;
     timeEnded: number;
+    finalTime: number;
 }
 // TODO: Different messages for different results
 // TODO: Different gif for different results
@@ -24,7 +25,7 @@ type Props = {
 // TODO: If not logged in show CTA to create account or log in
 
 
-export default function ResultPopover({title,description, points, maxPoints, timeLeft, timeOut, answerCounter, examId, token, timeStarted, timeEnded}: Props) {
+export default function ResultPopover({title,description, points, maxPoints, timeLeft, timeOut, answerCounter, examId, token, timeStarted, timeEnded, finalTime}: Props) {
   const wrong = maxPoints - points;
   const data = [
     { name: 'Correct', value: Number(points), color: "green" },
@@ -54,6 +55,10 @@ export default function ResultPopover({title,description, points, maxPoints, tim
                 <div className='flex flex-col gap-2 '>
                   <span className='font-bold'>Time ended</span>
                   <span className='font-bold'>{dayjs(timeEnded).format()}</span>
+                </div>
+                <div className='flex flex-col gap-2 '>
+                  <span className='font-bold'>Final time</span>
+                  <span className='font-bold'>{dayjs(finalTime).format()}</span>
                 </div>
               </div>
 

@@ -24,13 +24,18 @@ const Home: NextPage = () => {
   const exams = api.exam.getAllExams.useQuery();
   const duration = 60 * 1 * 1000; // 1 minutes
   const [startTime, setStartTime] = useState(Date.now());
-  const [endTime, setEndTime] = useState(Date.now()+duration);
-
+  const [endTime, setEndTime] = useState(0);
+  const [finalTime, setFinalTime] = useState(Date.now()+duration);
   const [nowTime, setNowTime] = useState(Date.now());
-  const timeLeft = (startTime - nowTime);
+  const [timeLeft, setTimeLeft] = useState(finalTime-nowTime);
   const timeOut = (Number(timeLeft) < 0.0) 
   const [examDuration, setExamDuration] = useState(duration);
   const [examToken, setExamToken] = useState("");
+  // use effect every second 
+  useEffect(() => {
+    setNowTime(Date.now());
+    setTimeLeft(finalTime-nowTime);
+  }, [nowTime]);
   
   // useEffect one time after site is loaded
   useEffect(() => {
@@ -90,7 +95,9 @@ const Home: NextPage = () => {
       if(tempProgressPercent == 100.0){
         toast.success("You have completed the exam, congratulations! 🎉");
         // Show results
+        setEndTime(Date.now());
         setExamFinished(true);
+        
       }
     
     }
@@ -211,7 +218,7 @@ const Home: NextPage = () => {
          
           <StatsBar
             timeLeft={timeLeft}
-
+            timeStarted={startTime}
             userPoints={userPoints}
             maxAnswers={Number(maxAnswers)}
             progressPercent={progressPercent}
@@ -226,10 +233,11 @@ const Home: NextPage = () => {
               maxPoints={Number(maxAnswers)}
               examId={examToken}
               token={answerToken}
-              timeLeft="0"
+              timeLeft={timeLeft}
               timeOut={true}
               timeStarted={startTime}
               timeEnded={endTime}
+              finalTime={finalTime}
               answerCounter={answerCounter}
               /> : <></>
               }
