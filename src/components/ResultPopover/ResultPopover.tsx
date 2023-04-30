@@ -2,6 +2,7 @@ import React from 'react'
 import Header from '../Header/Header';
 import { MdBrowseGallery, MdOutlineIncompleteCircle, MdContentCopy, MdOutlineDiamond,MdLocalFireDepartment, MdOutlineDateRange, MdIncompleteCircle } from "react-icons/md";
 import toast from "react-hot-toast";
+import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 
 type Props = {
     title: string;
@@ -19,7 +20,14 @@ type Props = {
 // TODO: Action buttons: Try again, Go to dashboard, Go to exam
 // TODO: If not logged in show CTA to create account or log in
 
+
 export default function ResultPopover({title,description, points, maxPoints, timeLeft, timeOut, answerCounter, examId, token}: Props) {
+  const wrong = maxPoints - points;
+  const data = [
+    { name: 'Correct', value: Number(points), color: "green" },
+    { name: 'Wrong', value: Number(wrong), color: "red" }
+  ];
+ 
   return (
     <div className='transition-all flex items-center justify-center min-h-3xl w-screen bg-blur flex-col absolute bg-slate-950/80 h-screen z-[200]'>
       
@@ -78,6 +86,28 @@ export default function ResultPopover({title,description, points, maxPoints, tim
                
               </div>
               </div>
+              <div className='mx-2 mt-6'>
+              <span>Share your results</span>
+              <PieChart width={200} height={200} >
+                <Pie
+                  data={data}
+                  cx={100}
+                  cy={100}
+                  innerRadius={60}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                
+              </PieChart>
+              
+              </div>
+             
             </div>
         </div>
     </div>
