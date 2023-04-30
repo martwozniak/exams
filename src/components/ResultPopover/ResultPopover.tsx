@@ -29,14 +29,14 @@ export default function ResultPopover({title,description, points, maxPoints, tim
   ];
  
   return (
-    <div className='transition-all flex items-center justify-center min-h-3xl w-screen bg-blur flex-col absolute bg-slate-950/80 h-screen z-[200]'>
+    <div className='transition-all flex items-center justify-center min-h-3xl  w-screen bg-blur flex-col absolute bg-slate-950/80 h-screen z-[200]'>
       
 
-        <div className='border flex-col gap-4 text-slate-300 px-8 py-16 border-slate-800 rounded-xl bg-slate-950'>
+        <div className='border min-h-full flex-col gap-2 sm:gap-4 text-slate-300 px-2 sm:px-8 py-4 sm:py-16 border-slate-800 rounded-xl bg-slate-950'>
           <span className='text-xl sm:text-3xl font-bold text-green-500'>{description}</span>
 
            <img src="https://media.tenor.com/r1hf8zhfBskAAAAM/jerry-springer-talk.gif" alt='Meme' className='w-full mt-6'/>
-            <div className='w-[70vw] sm:container flex flex-col mx-2 mt-6'>
+            <div className='w-full  sm:container flex flex-col mt-2 sm:mt-6'>
     
 
               <div className='border rounded-xl border-slate-800 flex justify-around gap-2 py-2 text-xs '>
@@ -48,7 +48,7 @@ export default function ResultPopover({title,description, points, maxPoints, tim
                   <span className='font-bold'>Time started</span>
                   <span className='font-bold'>{examId}</span>
                 </div>
-                <div className='flex flex-col gap-2'>
+                <div className='flex flex-col gap-2 '>
                   <span className='font-bold'>Time ended</span>
                   <span className='font-bold'>{examId}</span>
                 </div>
@@ -88,31 +88,33 @@ export default function ResultPopover({title,description, points, maxPoints, tim
               </div>
               <div className='mx-2 mt-6'>
               <span>Statistics</span>
-              <div className='flex gap-4 flex-col sm:flex-row'>
-              <BarChart width={230} height={250} data={data} >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Bar dataKey="value" fill="#475569" />
+              <div className='flex gap-2 sm:gap-4 flex-col sm:flex-row bg-slate-950'>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <BarChart width={230} height={250} data={data} className='hidden sm:flex'>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Bar dataKey="value" fill="#475569" />
 
-              </BarChart>
+                </BarChart>
 
-              <PieChart width={200} height={200}>
-                <Pie
-                  data={data}
-                  cx={100}
-                  cy={100}
-                  innerRadius={60}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie> 
-              </PieChart>
+                <PieChart width={200} height={200}>
+                  <Pie
+                    data={data}
+                    cx={100}
+                    cy={100}
+                    innerRadius={60}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {data.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie> 
+                </PieChart>
+              </div>
               
            
               <div className='w-full'>
