@@ -4,6 +4,7 @@ import { MdBrowseGallery, MdOutlineIncompleteCircle, MdContentCopy, MdOutlineDia
 import toast from "react-hot-toast";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, AreaChart, XAxis, CartesianGrid, Tooltip, YAxis, Area, BarChart, Legend, Bar } from 'recharts';
 import dayjs from 'dayjs';
+import ReactPDF from '@react-pdf/renderer';
 
 type Props = {
     title: string;
@@ -35,18 +36,22 @@ export default function ResultPopover({title,description, points, maxPoints, tim
   const totalTime = finalTime - timeStarted;
 
   return (
-    <div className='flex items-center justify-center'>
+    <div className='flex items-center justify-center sm:mx-4 pb-12'>
     <div className='transition-all w-full flex items-center justify-center min-h-3xl flex-col bg-slate-950/80'>
       
 
-        <div className='border min-h-full flex-col gap-2 sm:gap-4 text-slate-300 px-2 sm:px-8 py-4 sm:py-16 border-slate-800 rounded-xl bg-slate-950'>
+        <div className='border min-h-full max-w-full w-full flex-col gap-2 sm:gap-4 text-slate-300 px-2 sm:px-8 py-4 sm:py-16 border-slate-800 rounded-xl bg-slate-950'>
           <div className='text-xl sm:text-3xl font-bold'>{getResultTitle(points,maxPoints)}</div>
-            {getAnimatedImage(points, maxPoints)}
+          <div className='flex'>
+           <div> {getAnimatedImage(points, maxPoints)}</div>
+            
+          </div>
+       
           
             <div className='sm:container flex flex-col mt-2 sm:mt-6'>
     
 
-              <div className='border rounded-xl border-slate-800 flex justify-around gap-2 py-2 text-xs '>
+              <div className='border flex-col sm:flex-row rounded-xl border-slate-800 flex justify-around gap-2 py-2 text-xs '>
                 <div className='flex flex-col gap-2'>
                   <span className='font-bold'>Exam ID</span>
                   <span className='font-bold'>{examId}</span>
@@ -98,6 +103,7 @@ export default function ResultPopover({title,description, points, maxPoints, tim
                
               </div>
               </div>
+              
               <div className='mx-2 mt-6'>
               <span>Statistics</span>
               <div className='flex gap-2 sm:gap-4 flex-col sm:flex-row bg-slate-950'>
@@ -159,7 +165,14 @@ export default function ResultPopover({title,description, points, maxPoints, tim
               </div>
               </div>
 
+              <div>
+                <button className='bg-slate-900 text-slate-50 px-4 py-2 rounded-xl mt-4' onClick={() => {
+                    // void ReactPDF.render(<ResultPopover />, `/example.pdf`);
+                    console.log("Downloading")
 
+
+                } }>Download results</button>
+              </div>
               </div>
              
             </div>
