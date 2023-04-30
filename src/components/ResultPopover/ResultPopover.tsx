@@ -35,14 +35,15 @@ export default function ResultPopover({title,description, points, maxPoints, tim
   const totalTime = finalTime - timeStarted;
 
   return (
-    <div className='transition-all flex items-center justify-center min-h-3xl  w-screen bg-blur flex-col absolute bg-slate-950/80 h-screen z-[200]'>
+    <div className='flex items-center justify-center'>
+    <div className='transition-all w-full flex items-center justify-center min-h-3xl flex-col bg-slate-950/80'>
       
 
         <div className='border min-h-full flex-col gap-2 sm:gap-4 text-slate-300 px-2 sm:px-8 py-4 sm:py-16 border-slate-800 rounded-xl bg-slate-950'>
           <div className='text-xl sm:text-3xl font-bold'>{getResultTitle(points,maxPoints)}</div>
             {getAnimatedImage(points, maxPoints)}
           
-            <div className='w-full  sm:container flex flex-col mt-2 sm:mt-6'>
+            <div className='sm:container flex flex-col mt-2 sm:mt-6'>
     
 
               <div className='border rounded-xl border-slate-800 flex justify-around gap-2 py-2 text-xs '>
@@ -163,7 +164,7 @@ export default function ResultPopover({title,description, points, maxPoints, tim
              
             </div>
         </div>
-    </div>
+    </div></div>
   )
 }
 

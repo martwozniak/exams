@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from 'next/router'
 
 import { api } from "~/utils/api";
 import { FormEvent, MouseEventHandler, useEffect, useState } from "react";
@@ -57,6 +58,7 @@ const Home: NextPage = () => {
   const [examFinished, setExamFinished] = useState(false);
   const [examId, setExamId] = useState(""); 
   const answerToken = "tkn";
+  const router = useRouter()
 
   // use effect every second 
   useEffect(() => {
@@ -108,7 +110,7 @@ const Home: NextPage = () => {
         // Show results
         setEndTime(Date.now());
         setExamFinished(true);
-        
+        void router.push("#examResults");
       }
     
     }
@@ -178,6 +180,21 @@ const Home: NextPage = () => {
     }
   }
   );
+
+  // examFinished ? return(<ResultPopover 
+  //   title="Exam results"
+  //   description="You have completed the exam, congratulations! 🎉"
+  //   points={userPoints}
+  //   maxPoints={Number(maxAnswers)}
+  //   examId={examToken}
+  //   token={answerToken}
+  //   timeLeft={timeLeft}
+  //   timeOut={true}
+  //   timeStarted={startTime}
+  //   timeEnded={endTime}
+  //   finalTime={finalTime}
+  //   answerCounter={answerCounter}
+  //   />) :  "";
   
   return (
     <>
@@ -188,14 +205,14 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col bg-slate-950 text-sm main">
        <div className="blur-wrapper">
-      <Header/>
+
       
         <div className="hero flex items-center justify-center text-white py-4">
-        <div className="CTA-HERO text-slate-200 mt-0 sm:mt-8 mx-4 sm:mx-0">
+        <div className="CTA-HERO text-slate-200 mt-0 sm:mt-2 mx-4 sm:mx-0">
             <h1 className="text-2xl sm:text-6xl font-bold">Begin your niskopoziomowe journey 😊</h1>
             <i>Make niskopoziomowe great again</i>
         </div>
-  
+      
           </div>
           <div className="flex justify-center">
             <div className="container">
@@ -224,6 +241,21 @@ const Home: NextPage = () => {
                 ))}
               
               </form>
+              {examFinished ? <div id="examResults"><ResultPopover 
+            title="Exam results"
+            description="You have completed the exam, congratulations! 🎉"
+            points={userPoints}
+            maxPoints={Number(maxAnswers)}
+            examId={examToken}
+            token={answerToken}
+            timeLeft={timeLeft}
+            timeOut={true}
+            timeStarted={startTime}
+            timeEnded={endTime}
+            finalTime={finalTime}
+            answerCounter={answerCounter}
+            /></div> : ""
+            }
             </div>
           </div>
          
@@ -236,22 +268,10 @@ const Home: NextPage = () => {
             answerCounter={answerCounter}
             timeOut={timeOut}
           />
+
+        
           </div>
-           {examFinished ? <ResultPopover 
-              title="Exam results"
-              description="You have completed the exam, congratulations! 🎉"
-              points={userPoints}
-              maxPoints={Number(maxAnswers)}
-              examId={examToken}
-              token={answerToken}
-              timeLeft={timeLeft}
-              timeOut={true}
-              timeStarted={startTime}
-              timeEnded={endTime}
-              finalTime={finalTime}
-              answerCounter={answerCounter}
-              /> : <></>
-              }
+         
       </main>
       
     </>
