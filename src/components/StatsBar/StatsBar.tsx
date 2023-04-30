@@ -25,7 +25,7 @@ export default function StatsBar({answerCounter, maxAnswers, userPoints, progres
             <div className="flex container items-center p-4  gap-4 sm:gap-20 border-slate-900 border rounded-xl text-slate-700 text-xs sm:text-sm">
                     <div className="hidden sm:flex gap-2 w-24 sm:w-64 items-center">
                       <div><MdOutlineDateRange className='text-xl'/></div>
-                      <p className="text-slate-300 w-max">{`${dayjs(new Date()).format("MM-DD-YYYY")}`}</p>
+                      <p className="text-slate-300 w-max">{`${dayjs(new Date()).format("MM.DD.YYYY HH:m")}`}</p>
                     </div>
                     <div className="flex gap-2 w-24 items-center w-fit">
                       <div><MdBrowseGallery className='text-xl'/></div>

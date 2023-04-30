@@ -29,22 +29,10 @@ const Home: NextPage = () => {
   const [nowTime, setNowTime] = useState(Date.now());
   const [timeLeft, setTimeLeft] = useState(finalTime-nowTime);
   const timeOut = (Number(timeLeft) < 0.0) 
+  //const [timeOut, setTimeOut] = useState(false);
+
   const [examDuration, setExamDuration] = useState(duration);
   const [examToken, setExamToken] = useState("");
-  // use effect every second 
-  useEffect(() => {
-    setNowTime(Date.now());
-    setTimeLeft(finalTime-nowTime);
-  }, [nowTime]);
-  
-  // useEffect one time after site is loaded
-  useEffect(() => {
-    const examToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    localStorage.setItem("examToken", examToken);
-    setExamToken(localStorage.getItem("examToken") || "");
-    // starting time
-    const setStartTime = dayjs();
-  }, []);
 
   const questionList = questions.data;
   // Log all questions to console
@@ -69,6 +57,29 @@ const Home: NextPage = () => {
   const [examFinished, setExamFinished] = useState(false);
   const [examId, setExamId] = useState(""); 
   const answerToken = "tkn";
+
+  // use effect every second 
+  useEffect(() => {
+      if(!examFinished)
+      {
+        setNowTime(Date.now());
+        setTimeLeft(finalTime-nowTime);
+        if(finalTime==nowTime){
+          setExamFinished(true);
+        }
+      }
+
+  }, [nowTime, finalTime, examFinished]);
+
+  // useEffect one time after site is loaded
+  useEffect(() => {
+    const examToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 19)+ Math.random().toString(36).substring(2, 15);
+    localStorage.setItem("examToken", examToken);
+    setExamToken(localStorage.getItem("examToken") || "");
+    // starting time
+    const setStartTime = dayjs();
+  }, []);
+
 
   const  IsCorrect = (id : string, isCorrect : boolean, qId: string) : (MouseEventHandler<HTMLDivElement> | void | undefined) => {
     //console.log(id)
