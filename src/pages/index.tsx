@@ -23,7 +23,9 @@ const Home: NextPage = () => {
   const [nowTime, setNowTime] = useState(Date.now());
   const timeLeft = (startTime - nowTime).toLocaleString();
   const timeOut = (Number(timeLeft) < 0.0) 
-
+  const [examDuration, setExamDuration] = useState(duration);
+  const [examToken, setExamToken] = useState("");
+  
   // Update timer every second
   useEffect(() => {
     const interval = setInterval(() => setNowTime(Date.now()), 1000);
@@ -34,7 +36,13 @@ const Home: NextPage = () => {
     };
   }, []);
 
-  
+  // useEffect one time after site is loaded
+  useEffect(() => {
+    const examToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    localStorage.setItem("examToken", examToken);
+    setExamToken(localStorage.getItem("examToken") || "");
+  }, []);
+
   const questionList = questions.data;
   // Log all questions to console
   //console.log(questions?.data)
@@ -144,7 +152,13 @@ const Home: NextPage = () => {
     if (!event.target) return;
   };
   
-  const { mutate } = api.question.reportQuestionIssue.useMutation();
+  const { mutate, isLoading: isSendingQuestionIssueReport, } = api.question.reportQuestionIssue.useMutation(
+    {
+      onSuccess : () => {
+      toast.success("Thank you for your feedback! 😊");
+    }
+  }
+  );
   
   return (
     <>
@@ -173,8 +187,7 @@ const Home: NextPage = () => {
                     <div className="px-2 py-2 flex justify-between">
                       <div>{q.body}</div>
                       <div onClick={ () => {
-                        const issueReportResult = mutate({reportedQuestionId: q.id})
-                        toast("Zgloszono pytanie do moderacji")
+                        const issueReportResult = mutate({reportedQuestionId: q.id, token: examToken})
                       }} className="cursor-pointer text-slate-900 hover:text-slate-500 transition-all"><MdReportProblem/></div>
                     </div>
                     {q.answers.map((a) => (
@@ -209,7 +222,7 @@ const Home: NextPage = () => {
               description="You have completed the exam, congratulations! 🎉"
               points={userPoints}
               maxPoints={Number(maxAnswers)}
-              examId={examId}
+              examId={examToken}
               token={answerToken}
               timeLeft="0"
               timeOut={true}
