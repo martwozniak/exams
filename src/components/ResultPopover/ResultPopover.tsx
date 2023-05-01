@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, AreaChart, XAxis, CartesianGrid, Tooltip, YAxis, Area, BarChart, Legend, Bar } from 'recharts';
 import dayjs from 'dayjs';
 import ReactPDF from '@react-pdf/renderer';
+import Clipboard from 'react-clipboard.js';
 
 type Props = {
     title: string;
@@ -34,6 +35,9 @@ export default function ResultPopover({title,description, points, maxPoints, tim
   ];
 
   const totalTime = finalTime - timeStarted;
+  const examGeneratedLink = `${window.location.hostname}/results/${examId}`;
+
+  const toastSuccessCopied = () => toast.success("Copied to clipboard");
 
   return (
     <div className='flex items-center justify-center sm:mx-4 pb-12'>
@@ -89,18 +93,20 @@ export default function ResultPopover({title,description, points, maxPoints, tim
                 </div>
               </div>
 
-              <div className='mx-2 mt-6'>
+              <div className='mx-2 mt-6 flex items-center gap-4'>
               <span>Share your results</span>
-              <div className='flex gap-2 mt-2 border border-slate-900 rounded-xl w-full bg-slate-900 py-2 px-2 justify-between items-center'>
-                  <div className='text-slate-500'>{window.location.hostname}/results/<span className='text-slate-50'>{`${examId}`}</span></div>
-                  <MdContentCopy className='cursor-pointer' onClick={() => {
-                    async () => {
-                      const results = await navigator.clipboard.writeText(`${window.location.hostname}/results/${examId}`).then(() => { return true }).catch(() => { return false })
-                      console.log('copy')
-                      toast.success('Copied to clipboard')
-                    }
-                  }}/>
-               
+
+              <Clipboard data-clipboard-text={examGeneratedLink} onSuccess={toastSuccessCopied}>
+              <div className='flex gap-2  border border-slate-900 rounded-xl w-full bg-slate-900 py-2 px-2 justify-between items-center'>
+                  <div className='text-slate-500'>{examGeneratedLink}</div>
+                  <MdContentCopy className='cursor-pointer'/>
+              </div>
+              </Clipboard>
+              <span>
+                Follow our Social Media
+              </span>
+              <div>
+
               </div>
               </div>
               
