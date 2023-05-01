@@ -1,21 +1,20 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from 'next/router'
 
 import { api } from "~/utils/api";
-import { FormEvent, MouseEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import type {FormEvent, MouseEventHandler} from "react"
 import LoadingIndicator from "~/components/LoadingIndicator/LoadingIndicator";
-import Image from "next/image";
-import Header from "~/components/Header/Header";
+
 import StatsBar from "~/components/StatsBar/StatsBar";
 import toast from "react-hot-toast";
 import { MdReportProblem } from "react-icons/md";
 import ResultPopover from "~/components/ResultPopover/ResultPopover";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { object } from "zod";
+
 
 dayjs.extend(relativeTime);
 
@@ -23,7 +22,7 @@ dayjs.extend(relativeTime);
 const Home: NextPage = () => {
   // get answers related to question
   const questions = api.exam.getAllQuestionsAndAnswers.useQuery();
-  const exams = api.exam.getAllExams.useQuery();
+
   const duration = 60 * 1 * 1000; // 1 minutes
   const [startTime, setStartTime] = useState(Date.now());
   const [endTime, setEndTime] = useState(0);
@@ -31,9 +30,8 @@ const Home: NextPage = () => {
 
   const [timeLeft, setTimeLeft] = useState(finalTime-Date.now());
   const timeOut = (Number(timeLeft) < 0.0);
-  //const [timeOut, setTimeOut] = useState(false);
+
   const [pauseCountdown, setPauseCountdown] = useState(false);
-  // Update time interval
 
   interface UserAnswers {
     id: number;
@@ -42,6 +40,7 @@ const Home: NextPage = () => {
     userAnswerId: string;
   }
 
+  // Update time interval
   useEffect(() => {
       setInterval(() => {
         if(!pauseCountdown){
@@ -135,7 +134,7 @@ const Home: NextPage = () => {
           // find correct answer add green colo
           const correctAnswerId = `answer-${String(questions.data?.find((q) => q.id == qId)?.answers.find((a) => a.isCorrect == true)?.identifier)}`;
           const correctAnswerDivId = "div-"+correctAnswerId;
-          const correctAnswerDiv = document.getElementById(correctAnswerDivId);
+         // const correctAnswerDiv = document.getElementById(correctAnswerDivId);
           
         }
         const correct = questionList?.find((q) => q.id == qId)?.answers.find((a) => a.isCorrect == true)?.identifier;

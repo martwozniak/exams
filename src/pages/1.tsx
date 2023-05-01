@@ -5,14 +5,13 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from 'next/router'
 
 import { api } from "~/utils/api";
-import { FormEvent, MouseEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import type {FormEvent, MouseEventHandler} from "react"
 import LoadingIndicator from "~/components/LoadingIndicator/LoadingIndicator";
-import Image from "next/image";
-import Header from "~/components/Header/Header";
+
 import StatsBar from "~/components/StatsBar/StatsBar";
 import toast from "react-hot-toast";
 import { MdReportProblem } from "react-icons/md";
-import ResultPopover from "~/components/ResultPopover/ResultPopover";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import CTA from "~/components/CTA/CTA";
