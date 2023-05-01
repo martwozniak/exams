@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import Header from '../Header/Header';
 import { MdBrowseGallery, MdOutlineIncompleteCircle, MdContentCopy, MdOutlineDiamond,MdLocalFireDepartment, MdOutlineDateRange, MdIncompleteCircle } from "react-icons/md";
 import toast from "react-hot-toast";
@@ -14,7 +14,6 @@ type Props = {
     description: string;
     points: number;
     maxPoints: number;
-    timeLeft: number;
     timeOut: boolean;
     answerCounter: number;
     examId: string;
@@ -29,7 +28,7 @@ type Props = {
 // TODO: If not logged in show CTA to create account or log in
 
 
-export default function ResultPopover({title,description, points, maxPoints, timeLeft, timeOut, answerCounter, examId, token, timeStarted, timeEnded, finalTime}: Props) {
+export default function ResultPopover({title,description, points, maxPoints, timeOut, answerCounter, examId, token, timeStarted, timeEnded, finalTime}: Props) {
   const wrong = maxPoints - points;
   const data = [
     { name: 'Correct', value: Number(points), color: "green" },
@@ -48,10 +47,10 @@ export default function ResultPopover({title,description, points, maxPoints, tim
       
 
         <div className='border min-h-full max-w-full w-full flex-col gap-2 sm:gap-4 text-slate-300 px-2 sm:px-8 py-4 sm:py-16 border-slate-800 rounded-xl bg-slate-950'>
-          <div className='text-xl sm:text-3xl font-bold'>{getResultTitle(points,maxPoints)}</div>
-          <div className='flex'>
+    
+          <div className='flex items-center gap-4'>
            <div> {getAnimatedImage(points, maxPoints)}</div>
-            
+         {getResultTitle(points,maxPoints)}
           </div>
        
           
@@ -96,7 +95,7 @@ export default function ResultPopover({title,description, points, maxPoints, tim
                 </div>
               </div>
 
-              <div className='mx-2 mt-6 flex items-center gap-4'>
+              <div className='mx-2 mt-6 flex items-center gap-4 flex flex-col sm:flex-row'>
               <span>Share your results</span>
 
               <Clipboard data-clipboard-text={examGeneratedLink} onSuccess={toastSuccessCopied}>
@@ -108,7 +107,7 @@ export default function ResultPopover({title,description, points, maxPoints, tim
               <span>
                 Follow our Social Media
               </span>
-              <div className='flex gap-2 text-slate-800'>
+              <div className='flex flex-row gap-2 text-slate-800'>
                 <a href="https://www.facebook.com/">
                   <AiFillFacebook className='text-3xl cursor-pointer transition-all hover:text-slate-50'/>
                 </a>
@@ -265,11 +264,17 @@ const getAnimatedImage = (points:number, maxPoints:number) => {
 
 const getResultTitle = (points:number, maxPoints:number) => {
   const examResult = getExamResult(points, maxPoints, true)
-  if(examResult === 'Passed') {
-  return (<div className='text-green-500'>You have completed the exam, congratulations! 🎉</div>);
-  } else if(examResult === 'Failed') {
-    return (<div className='text-red-500'>Not this time bruv, try again!</div>);
-  } else {
-    return (<div className='text-blue-500'>Something is broken...</div>);
+
+  const wrapper  = (text:string, statusClass:string)  => { 
+    return (<div className={`text-xl sm:text-3xl flex items-center justify-center w-full min-h-[140px] font-bold text-slate-950 ${statusClass}`}>{text}</div>);
   }
+
+  if(examResult === 'Passed') {
+    return wrapper('You have completed the exam, congratulations! 🎉', 'bg-green-600')
+  } else if(examResult === 'Failed') {
+    return wrapper('Not this time bruv, try again!', 'bg-red-600')
+  } else {
+    return wrapper('Something is broken...</!', 'bg-blue-600')
+  }
+
 }

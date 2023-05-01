@@ -12,13 +12,17 @@ type Props = {
     userPoints: number;
     progressPercent: number;
     timeOut: boolean;
-    timeLeft: number;
     timeStarted: number;
+    pauseCountdown: boolean;
+    timeEnded: number;
+    finalTime: number;
+    duration: number;
 }
 
-export default function StatsBar({answerCounter, maxAnswers, userPoints, progressPercent, timeOut, timeLeft, timeStarted}: Props) {
- 
-  console.log(timeLeft)
+export default function StatsBar({answerCounter, maxAnswers, userPoints, progressPercent, timeOut, timeStarted, pauseCountdown, timeEnded, finalTime, duration}: Props) {
+
+  const timeLeft = !pauseCountdown ? timeStarted + (duration) - Date.now() : (timeEnded-timeStarted);
+
   return (
     <>
      <div className="stats flex  bottom-0 left-0 z-50 bg-slate-950 fixed w-full justify-center">

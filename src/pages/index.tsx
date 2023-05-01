@@ -18,6 +18,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
+
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
   // get answers related to question
@@ -27,28 +28,28 @@ const Home: NextPage = () => {
   const [startTime, setStartTime] = useState(Date.now());
   const [endTime, setEndTime] = useState(0);
   const [finalTime, setFinalTime] = useState(Date.now()+duration);
-  const [nowTime, setNowTime] = useState(Date.now());
-  const [timeLeft, setTimeLeft] = useState(finalTime-nowTime);
-  const timeOut = (Number(timeLeft) < 0.0) 
+
+  const [timeLeft, setTimeLeft] = useState(finalTime-Date.now());
+  const timeOut = (Number(timeLeft) < 0.0);
   //const [timeOut, setTimeOut] = useState(false);
+  const [pauseCountdown, setPauseCountdown] = useState(false);
+  // Update time interval
+
+  useEffect(() => {
+      setInterval(() => {
+        if(!pauseCountdown){
+          setTimeLeft(finalTime-Date.now())
+      }}, 1000);
+  }, []);
 
   const [examDuration, setExamDuration] = useState(duration);
   const [examToken, setExamToken] = useState("");
 
   const questionList = questions.data;
-  // Log all questions to console
-  //console.log(questions?.data)
-  
-  //console.log(exams.isSuccess)
-  //console.log(questions.isSuccess)
-  // handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   //console.log(event.target[0].value)
-  // }
+
   const userAnswers = [
     
   ];
-  // Set start timer time to now + 30 minutes
 
   const [userPoints, setUserPoints] = useState(0);
   const [answerCounter, setAnswerCounter] = useState(0);
@@ -61,17 +62,9 @@ const Home: NextPage = () => {
   const router = useRouter()
 
   // use effect every second 
-  useEffect(() => {
-      if(!examFinished)
-      {
-        setNowTime(Date.now());
-        setTimeLeft(finalTime-nowTime);
-        if(finalTime==nowTime){
-          setExamFinished(true);
-        }
-      }
-
-  }, [nowTime, finalTime, examFinished]);
+  // TODO: Timeleft is not updating correctly
+  // if current time == final time, then set examFinished to true
+  if(finalTime==Date.now()){  setExamFinished(true);}
 
   // useEffect one time after site is loaded
   useEffect(() => {
@@ -80,13 +73,12 @@ const Home: NextPage = () => {
     setExamToken(localStorage.getItem("examToken") || "");
     // starting time
     const setStartTime = dayjs();
+
+
   }, []);
 
 
   const  IsCorrect = (id : string, isCorrect : boolean, qId: string) : (MouseEventHandler<HTMLDivElement> | void | undefined) => {
-    //console.log(id)
-    //console.log(isCorrect)
-
 
     const currentTag = "input[name="+qId+"]";
     const answers = document.querySelectorAll(currentTag);
@@ -110,6 +102,7 @@ const Home: NextPage = () => {
         // Show results
         setEndTime(Date.now());
         setExamFinished(true);
+        setPauseCountdown(true);
         void router.push("#examResults");
       }
     
@@ -117,20 +110,14 @@ const Home: NextPage = () => {
     
 
     if(isCorrect==true){
-      //console.log("Correct answer")
-
-
         if(answerId == null) return;
 
-        //console.log(correctAnswer?.classList)
-        // check if have class bg-green-500
         if(correctAnswer?.classList.contains("bg-green-500")){
           answersId.checked = false;
         } else {
           answersId.checked = true;
         }
         
-        // if input field are disabled, then do not add points
         if(!answersId.disabled) {
           setUserPoints(userPoints+1.0);
           correctAnswer?.classList.add("bg-green-500");
@@ -147,15 +134,13 @@ const Home: NextPage = () => {
           const correctAnswerDiv = document.getElementById(correctAnswerDivId);
           
         }
-        // find correct answer add green color
         const correct = questionList?.find((q) => q.id == qId)?.answers.find((a) => a.isCorrect == true)?.identifier;
     
         const correctDiv = `div-${String(correct)}`;
         const corAns = document.getElementById(correctDiv);
         corAns?.classList.add("bg-green-500");
         (corAns as HTMLButtonElement).disabled = true;
-        // setAnswerCounter(anserCounter+1.0)
-        // setProgressPercent((anserCounter/maxAnswers)*100);
+
     }
     // Disable other options
     answers.forEach((answer) => {
@@ -163,7 +148,6 @@ const Home: NextPage = () => {
     } )
     
   };
-
 
   const handleSubmit = (event : (FormEvent)) : void =>  {
     event.preventDefault(); // Prevent form submission
@@ -181,21 +165,6 @@ const Home: NextPage = () => {
   }
   );
 
-  // examFinished ? return(<ResultPopover 
-  //   title="Exam results"
-  //   description="You have completed the exam, congratulations! 🎉"
-  //   points={userPoints}
-  //   maxPoints={Number(maxAnswers)}
-  //   examId={examToken}
-  //   token={answerToken}
-  //   timeLeft={timeLeft}
-  //   timeOut={true}
-  //   timeStarted={startTime}
-  //   timeEnded={endTime}
-  //   finalTime={finalTime}
-  //   answerCounter={answerCounter}
-  //   />) :  "";
-  
   return (
     <>
       <Head>
@@ -249,7 +218,6 @@ const Home: NextPage = () => {
             maxPoints={Number(maxAnswers)}
             examId={examToken}
             token={answerToken}
-            timeLeft={timeLeft}
             timeOut={true}
             timeStarted={startTime}
             timeEnded={endTime}
@@ -261,13 +229,17 @@ const Home: NextPage = () => {
           </div>
 
           <StatsBar
-            timeLeft={timeLeft}
             timeStarted={startTime}
             userPoints={userPoints}
             maxAnswers={Number(maxAnswers)}
             progressPercent={progressPercent}
             answerCounter={answerCounter}
             timeOut={timeOut}
+            pauseCountdown={pauseCountdown}
+            timeEnded={endTime}
+            finalTime={finalTime}
+            duration={duration}
+
           />
 
         
