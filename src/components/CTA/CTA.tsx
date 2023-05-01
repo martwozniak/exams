@@ -5,8 +5,8 @@ import React from 'react'
 export default function CTA() {
   return (
          <div className='CTA'>
-        <div className='flex justify-center my-6'>
-          <div className='container border border-slate-800 rounded-xl  flex gap-4 items-center'>
+        <div className='flex flex-col sm:flex-row justify-center my-6'>
+          <div className='container  flex-col sm:flex-row border border-slate-800 rounded-xl  flex gap-4 items-end'>
             <div className='max-w-md flex gap-2 flex-col gap-2 mx-8 py-4'>
               <span className='text-3xl font-bold'>Chcesz więcej?</span>
               <p>Dołącz do naszej spolecznosci, aby otrzymywać powiadomienia o nowych pytaniach. Zaloz konto juz dzis i miej dostep do statystyk oraz podsumowan Twoich egzaminow</p>
@@ -18,7 +18,7 @@ export default function CTA() {
             </div>
 
             </div>
-            <div className='flex justify-center w-full'>
+            <div className='flex justify-center w-full items-end flex-col'>
               <img src="/assets/people.png" alt="CTA" className=''/>
             </div>
         </div>
