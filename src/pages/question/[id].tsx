@@ -2,7 +2,8 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react'
 import { api } from "../../utils/api";
 import Head from 'next/head';
-const ALPHABET = ["A","B","C", "D", "E", "F", "G", "H", "I", "J", "K"];
+import { Answer, Question } from '@prisma/client';
+const ALPHABET = ["A","B","C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"];
 
 export default function ShowSingleQuestion() {
 
@@ -28,7 +29,7 @@ export default function ShowSingleQuestion() {
   }
 
   const answerCount = singleQuestionQuery.data?.answers?.length;
-  const correctBody = singleQuestionQuery.data?.answers?.map((a) => {
+  const correctBody = singleQuestionQuery.data?.answers?.map((a : Answer) => {
     if(a.isCorrect) {
       return(a.body);
     }
@@ -44,16 +45,15 @@ export default function ShowSingleQuestion() {
     "@context": "https://schema.org",
     "@type": "Question",
     "name": "${singleQuestionQuery?.data?.body || ""}",
-    "upvoteCount": "196",
     "text": "${singleQuestionQuery?.data?.body || ""}",
     "answerCount": "${String(answerCount)}",
     "acceptedAnswer": {
         "@type": "Answer",
-        "text": "${String(correctBody) || ""}",
+        "text": "${String(correctBody) || ""}"
     },
     "suggestedAnswer": {
         "@type": "Answer",
-        "text": "${String(correctBody) || ""}",
+        "text": "${String(correctBody) || ""}"
     }
 }
 `}}></script>
