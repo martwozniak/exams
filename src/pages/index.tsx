@@ -21,7 +21,6 @@ dayjs.extend(relativeTime);
 
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
   // get answers related to question
   const questions = api.exam.getAllQuestionsAndAnswers.useQuery();
   const exams = api.exam.getAllExams.useQuery();
@@ -36,6 +35,13 @@ const Home: NextPage = () => {
   const [pauseCountdown, setPauseCountdown] = useState(false);
   // Update time interval
 
+  interface UserAnswers {
+    id: number;
+    qId: string;
+    result: number;
+    userAnswerId: string;
+  }
+
   useEffect(() => {
       setInterval(() => {
         if(!pauseCountdown){
@@ -48,9 +54,7 @@ const Home: NextPage = () => {
 
   const questionList = questions.data;
 
-  const userAnswers : string[] = [
-    
-  ];
+  const [userAnswers, setUserAnswers] = useState<UserAnswers[]>([]); // {id: number, qId: string, result: number}[] = [];
 
   const [userPoints, setUserPoints] = useState(0);
   const [answerCounter, setAnswerCounter] = useState(0);
@@ -79,7 +83,7 @@ const Home: NextPage = () => {
   }, []);
 
 
-  const  IsCorrect = (id : string, isCorrect : boolean, qId: string) : (MouseEventHandler<HTMLDivElement> | void | undefined) => {
+  const  IsCorrect = (id : string, isCorrect : boolean, qId: string, iterator: number) : (MouseEventHandler<HTMLDivElement> | void | undefined) => {
 
     const currentTag = "input[name="+qId+"]";
     const answers = document.querySelectorAll(currentTag);
@@ -109,7 +113,6 @@ const Home: NextPage = () => {
     
     }
     
-
     if(isCorrect==true){
         if(answerId == null) return;
 
@@ -122,12 +125,10 @@ const Home: NextPage = () => {
         if(!answersId.disabled) {
           setUserPoints(userPoints+1.0);
           correctAnswer?.classList.add("bg-green-500");
-          // ! TODO: Add correct answer to answer list { qId: 1,0 }} 
-          //userAnswers.push({ answersId: "1" });
+          setUserAnswers([...userAnswers, { id: iterator, qId: qId, result: 1, userAnswerId: id}]);
         }
     }else {
-      //console.log("Incorrect answer")
-  
+
         if(!answersId.disabled && answersId != null) { 
           answersId.checked = true;
           correctAnswer?.classList.add("bg-red-500");
@@ -143,8 +144,7 @@ const Home: NextPage = () => {
         const corAns = document.getElementById(correctDiv);
         corAns?.classList.add("bg-green-500");
         (corAns as HTMLButtonElement).disabled = true;
-        // ! TODO: Add to answer list { qId: 0,0 }}
-        //userAnswers.push({ answersId: "0" });
+        setUserAnswers([...userAnswers, { id: iterator, qId: qId, result: 0, userAnswerId: id }]);
 
     }
     // Disable other options
@@ -183,7 +183,7 @@ const Home: NextPage = () => {
         <div className="hero flex items-center justify-center text-white py-4">
      
         <div className="CTA-HERO text-slate-200 mt-0 sm:mt-2 mx-4 sm:mx-0">
-            <h1 className="text-2xl sm:text-6xl font-bold">Begin your niskopoziomowe journey 😊</h1>
+            <h1 className="text-2xl sm:text-4xl xl:text-6xl font-bold">Begin your niskopoziomowe journey 😊</h1>
             <i>Make niskopoziomowe great again</i>
         </div>
       
@@ -192,7 +192,7 @@ const Home: NextPage = () => {
             <div className="container">
               <form className="formExam text-slate-50" onSubmit={handleSubmit}>
                
-                {questions.isLoading ? <LoadingIndicator /> : questionList?.map((q) => (
+                {questions.isLoading ? <LoadingIndicator /> : questionList?.map((q, iterator) => (
                   <div key={q.id} className="px-4 py-4 border border-slate-800 rounded-xl my-4 mx-4">
                     <div className="px-2 py-2 flex justify-between">
                       <div>{q.body}</div>
@@ -200,9 +200,15 @@ const Home: NextPage = () => {
                         const issueReportResult = mutate({reportedQuestionId: q.id, token: examToken})
                       }} className="cursor-pointer text-slate-900 hover:text-slate-500 transition-all"><MdReportProblem/></div>
                     </div>
+                    {/** If question iterator % 3 then show component with CTA convincing people to create account,
+                     * if not then show question - include people who are not logging in, if person is loggin the not show it
+                     * TODO: Conditional rendering for persons who are logged in and not logged in
+                     * Logged In convince to spend more time on the website
+                     * Not logged in convince to create account
+                     */}
                     {q.answers.map((a) => (
                     <div key={a.identifier} onClick={
-                      () => IsCorrect(a.identifier, a.isCorrect, q.id)
+                      () => IsCorrect(a.identifier, a.isCorrect, q.id, iterator)
                     }  id={`div-${a.identifier}`} className="px-2  transition-all py-2 rounded-xl cursor-pointer focus:text-white">
                       <input type="radio" name={q.id} value={a.identifier} id={`answer-${a.identifier}`}  className="mr-2" />
                       <label htmlFor={`answer-${a.identifier}`}>{a.body}</label>
@@ -227,6 +233,7 @@ const Home: NextPage = () => {
             timeEnded={endTime}
             finalTime={finalTime}
             answerCounter={answerCounter}
+            userAnswers={userAnswers}
             /></div> : ""
             }
             </div>

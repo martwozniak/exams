@@ -1,13 +1,20 @@
 import React, { ReactNode } from 'react'
 import Header from '../Header/Header';
-import { MdBrowseGallery, MdOutlineIncompleteCircle, MdContentCopy, MdOutlineDiamond,MdLocalFireDepartment, MdOutlineDateRange, MdIncompleteCircle } from "react-icons/md";
+import { MdBrowseGallery, MdOutlineIncompleteCircle, MdContentCopy, MdOutlineDiamond,MdLocalFireDepartment, MdOutlineDateRange, MdIncompleteCircle, MdOutlineDownloadForOffline } from "react-icons/md";
 import toast from "react-hot-toast";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, AreaChart, XAxis, CartesianGrid, Tooltip, YAxis, Area, BarChart, Legend, Bar } from 'recharts';
 import dayjs from 'dayjs';
 import ReactPDF from '@react-pdf/renderer';
 import Clipboard from 'react-clipboard.js';
-import { AiFillFacebook, AiFillYoutube,AiFillInstagram, AiFillTwitterSquare, AiFillGoogleCircle } from "react-icons/ai";
-import { BsDiscord, BsMailbox, BsDownload } from "react-icons/bs";
+import { AiFillFacebook, AiFillYoutube,AiFillInstagram, AiFillTwitterSquare,AiOutlineClockCircle, AiFillGoogleCircle, AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
+import { BsDiscord,BsPercent, BsMailbox, BsDownload } from "react-icons/bs";
+import { BiMailSend } from "react-icons/bi";
+import { FaRegCopy } from "react-icons/fa";
+interface UserAnswers {
+  id: number;
+  qId: string;
+  result: number;
+}
 
 type Props = {
     title: string;
@@ -21,6 +28,7 @@ type Props = {
     timeStarted: number;
     timeEnded: number;
     finalTime: number;
+    userAnswers: UserAnswers[];
 }
 // TODO: Different messages for different results
 // TODO: Different gif for different results
@@ -28,7 +36,7 @@ type Props = {
 // TODO: If not logged in show CTA to create account or log in
 
 
-export default function ResultPopover({title,description, points, maxPoints, timeOut, answerCounter, examId, token, timeStarted, timeEnded, finalTime}: Props) {
+export default function ResultPopover({title,description, points, maxPoints, timeOut, answerCounter, examId, token, timeStarted, timeEnded, finalTime, userAnswers}: Props) {
   const wrong = maxPoints - points;
   const data = [
     { name: 'Correct', value: Number(points), color: "green" },
@@ -57,7 +65,7 @@ export default function ResultPopover({title,description, points, maxPoints, tim
             <div className='sm:container flex flex-col mt-2 sm:mt-6'>
     
 
-              <div className='border flex-col sm:flex-row rounded-xl border-slate-800 flex justify-around gap-2 py-2 text-xs '>
+              <div className='border flex-col pl-4 py-4 sm:flex-row rounded-xl border-slate-800 flex justify-around gap-2 py-2 text-xs '>
                 <div className='flex flex-col gap-2'>
                   <span className='font-bold'>Exam ID</span>
                   <span className='font-bold'>{examId}</span>
@@ -74,6 +82,30 @@ export default function ResultPopover({title,description, points, maxPoints, tim
                   <span className='font-bold'>Final time</span>
                   <span className='font-bold'>{dayjs(finalTime).format("H:m s/60")}</span>
                 </div>
+              </div>
+              <div className='border mt-8 rounded-xl border-slate-800 flex justify-around gap-4 py-8 py-4'>
+                <div className='flex flex-col justify-center items-center'>
+                <BsPercent className='text-xl'/>
+                  <span className='text-xl sm:text-3xl  font-bold'>{Number((points/maxPoints)*100).toPrecision(4)} </span>
+                </div>
+      
+                <div className='font-bold flex items-center text-4xl'>{getExamResult(points, maxPoints, false)}</div>
+
+                <div className='grid items-center gap-2 grid-cols-5'>
+                 {/** List of all questions idicated by icons with color AiOutlineCheckCircle,AiOutlineClockCircle,AiOutlineCloseCircle  */}
+                  {
+                    userAnswers.map((answer, iterator) => {
+                      if(answer.result === 1){
+                        return <div key={iterator} className='flex flex-col items-center justify-center gap-2 text-green-500'><AiOutlineCheckCircle className='text-xl'/><span>{answer.id+1}</span></div>
+                      } else if(answer.result === 0){
+                        return <div key={iterator} className='flex flex-col items-center justify-center gap-2 text-red-500'><AiOutlineCloseCircle className='text-xl'/><span>{answer.id+1}</span></div>
+                      } else {
+                        return <div key={iterator} className='flex flex-col items-center justify-center gap-2 text-yellow-500'><AiOutlineClockCircle className='text-xl'/><span>{answer.id+1}</span></div>
+                      }
+                    })
+                  }
+                </div>
+              
               </div>
 
               <div className='border mt-8 rounded-xl border-slate-800 flex justify-around gap-4 py-8 py-4'>
@@ -95,11 +127,11 @@ export default function ResultPopover({title,description, points, maxPoints, tim
                 </div>
               </div>
 
-              <div className='mx-2 mt-6 flex items-center gap-4 flex flex-col sm:flex-row'>
+              <div className='mx-2 mt-6 flex items-center gap-4 flex flex-col xl:flex-row'>
               <span>Share your results</span>
 
               <Clipboard data-clipboard-text={examGeneratedLink} onSuccess={toastSuccessCopied}>
-              <div className='flex gap-2  border border-slate-900 rounded-xl w-full bg-slate-900 py-2 px-2 justify-between items-center'>
+              <div className='flex gap-2  border border-slate-900 rounded-xl w-full bg-slate-900 px-4 py-2  justify-between items-center'>
                   <div className='text-slate-500'>{examGeneratedLink}</div>
                   <MdContentCopy className='cursor-pointer'/>
               </div>
@@ -125,18 +157,25 @@ export default function ResultPopover({title,description, points, maxPoints, tim
                 </a>
               </div>
               <div className='flex gap-2 items-center'>
+     
+           
+                  <div className='flex gap-2 ml-4 items-center justify-center border border-slate-800 px-4 py-2 rounded-xl text-slate-800 hover:text-slate-50 hover:border-slate-50 cursor-pointer transition-all'>
                   <span>Send</span>
                   <div>
                     <a href="https://www.gmail.com/">
-                      <BsMailbox className='text-3xl text-slate-800 cursor-pointer transition-all hover:text-slate-50'/>
+                      <BiMailSend className='text-2xl cursor-pointer'/>
                     </a>
                   </div>
+                  </div>
+                  <div className='flex gap-2 ml-4 items-center justify-center border border-slate-800 px-4 py-2 rounded-xl text-slate-800 hover:text-slate-50 hover:border-slate-50 cursor-pointer transition-all'>
                   <span>Download</span>
                   <div>
                     <a href="https://www.gmail.com/">
-                      <BsDownload className='text-2xl text-slate-800 cursor-pointer transition-all hover:text-slate-50'/>
+                      <MdOutlineDownloadForOffline className='text-2xl cursor-pointer'/>
                     </a>
                   </div>
+                  </div>
+           
               </div>
               </div>
      

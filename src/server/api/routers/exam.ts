@@ -13,6 +13,14 @@ export const examRouter = createTRPCRouter({
     const exams = ctx.prisma.exam.findMany();
     return exams;
   }),
+  getSpecificExam: publicProcedure.input(z.object({ examId: z.string()})).query(({ ctx,input }) => {
+    const examId = input.examId;
+    const exam = ctx.prisma.exam.findUnique({
+      where: { id: examId },
+      include: {questions: true},
+    });
+    return exam;
+  }),
   getAllQuestionsAndAnswers: publicProcedure.query(({ ctx }) => {
     // with answers 
     //const questions = ctx.prisma.question.findMany();
