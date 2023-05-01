@@ -15,6 +15,7 @@ import { MdReportProblem } from "react-icons/md";
 import ResultPopover from "~/components/ResultPopover/ResultPopover";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { object } from "zod";
 
 dayjs.extend(relativeTime);
 
@@ -47,7 +48,7 @@ const Home: NextPage = () => {
 
   const questionList = questions.data;
 
-  const userAnswers = [
+  const userAnswers : string[] = [
     
   ];
 
@@ -121,6 +122,8 @@ const Home: NextPage = () => {
         if(!answersId.disabled) {
           setUserPoints(userPoints+1.0);
           correctAnswer?.classList.add("bg-green-500");
+          // ! TODO: Add correct answer to answer list { qId: 1,0 }} 
+          //userAnswers.push({ answersId: "1" });
         }
     }else {
       //console.log("Incorrect answer")
@@ -140,13 +143,14 @@ const Home: NextPage = () => {
         const corAns = document.getElementById(correctDiv);
         corAns?.classList.add("bg-green-500");
         (corAns as HTMLButtonElement).disabled = true;
+        // ! TODO: Add to answer list { qId: 0,0 }}
+        //userAnswers.push({ answersId: "0" });
 
     }
     // Disable other options
     answers.forEach((answer) => {
       (answer as HTMLButtonElement).disabled = true;
     } )
-    
   };
 
   const handleSubmit = (event : (FormEvent)) : void =>  {

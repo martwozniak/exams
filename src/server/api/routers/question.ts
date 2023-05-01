@@ -1,5 +1,4 @@
 import { z } from "zod";
-import type { NextRequest } from 'next/server'
 
 import {
   createTRPCRouter,
@@ -37,7 +36,7 @@ export const questionRouter = createTRPCRouter({
   }),
   getRandomOne: publicProcedure.input(z.object({ numberOfQuestions: z.number()})).query(({ ctx,input }) => {
     const questionLimit  = Number(input.numberOfQuestions);
-    const countAllquestions = ctx.prisma.question.count();
+   // const countAllquestions = ctx.prisma.question.count();
 
     //const randomQuestion = Number(Math.floor(Math.random() * Number(countAllquestions)));
     const randomQuestion = 1;
@@ -51,7 +50,7 @@ export const questionRouter = createTRPCRouter({
   }),
   getNQuestions: publicProcedure.input(z.object({ numberOfQuestions: z.number()})).query(({ ctx,input }) => {
     const questionLimit  = Number(input.numberOfQuestions);
-    const countAllquestions = ctx.prisma.question.count();
+    //const countAllquestions = ctx.prisma.question.count();
 
     //const randomQuestion = Number(Math.floor(Math.random() * Number(countAllquestions)));
     const randomQuestion = 1;

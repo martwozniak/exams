@@ -46,7 +46,7 @@ export default function ResultPopover({title,description, points, maxPoints, tim
     <div className='transition-all w-full flex items-center justify-center min-h-3xl flex-col bg-slate-950/80'>
       
 
-        <div className='border min-h-full max-w-full w-full flex-col gap-2 sm:gap-4 text-slate-300 px-2 sm:px-8 py-4 sm:py-16 border-slate-800 rounded-xl bg-slate-950'>
+        <div className='border min-h-full max-w-full w-full flex-col gap-2 sm:gap-4 text-slate-300 px-2 sm:px-8 py-4 sm:py-4 border-slate-800 rounded-xl bg-slate-950'>
     
           <div className='flex items-center gap-4'>
            <div> {getAnimatedImage(points, maxPoints)}</div>

@@ -23,7 +23,8 @@ export const examRouter = createTRPCRouter({
   }),
   getNQuestionsAndAnswers: publicProcedure.input(z.object({ numberOfQuestions: z.number()})).query(({ ctx,input }) => {
     const questionLimit  = Number(input.numberOfQuestions);
-    const countAllquestions = ctx.prisma.question.count();
+    // const countAllQuestions = ctx.prisma.question.count();
+    // Randomize questions
 
     const questions = ctx.prisma.question.findMany({
       take: questionLimit,
