@@ -18,9 +18,8 @@ export default function Header() {
           </div>
 
           <div className="flex gap-2 sm:gap-4 items-center text-xs transition-all text-slate-400 ">
+            <Link href="/exams"><div className="cursor-pointer transition-all hover:text-slate-50">Egzaminy</div></Link>
             <Link href="/1"><div className="cursor-pointer transition-all hover:text-slate-50">Test 1 pytanie</div></Link>
-            <Link href="/15"><div className="cursor-pointer transition-all hover:text-slate-50">Test 15 pytan</div></Link>
-            <Link href="/40"> <div className="cursor-pointer transition-all hover:text-slate-50">Test 40 pytan</div></Link>
          { isLogged ? <>
           <div>
           <div className='flex gap-2 items-center text-emerald-600'>
@@ -35,7 +34,7 @@ export default function Header() {
             <img src='https://avatars.githubusercontent.com/u/7525670?v=4' className="w-8 h-8 rounded-full" alt="User avatar"/>
           </div>
    
-          <div className="hidden absolute group-hover:flex bg-slate-950 border border-slate-800 rounded-xl top-50 mt-1 right-0 w-full px-4 py-4">
+          <div className="hidden absolute group-hover:flex bg-slate-950 border border-slate-800 rounded-xl top-50 right-0 w-full px-4 py-4">
             <div className="flex flex-col gap-4">
               <Link href="/profile" className='transition-all hover:text-slate-50'>Profile</Link>
               <Link href="/statistics" className='transition-all hover:text-slate-50'>Statistics</Link>
