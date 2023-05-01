@@ -9,7 +9,12 @@ export default function ShowSingleQuestion() {
 
   const router = useRouter();
   const identifier = router.query.id! as string;
-  const singleQuestionQuery = api.question.getOne.useQuery({ slug: identifier });
+  const [dataIsLoaded, setDataIsLoaded] = useState(false);
+  const singleQuestionQuery = api.question.getOne.useQuery({ slug: identifier }, {
+    onSuccess: (data) => {
+      setDataIsLoaded(true);
+    }
+  });
 
 
   const highlightCorrect = (correctId : string) => {
@@ -40,6 +45,7 @@ export default function ShowSingleQuestion() {
     <Head>
       <title>{singleQuestionQuery?.data?.body}</title>
       <meta name="description" content={singleQuestionQuery?.data?.body} />
+
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html:`
     {
     "@context": "https://schema.org",
@@ -57,6 +63,7 @@ export default function ShowSingleQuestion() {
     }
 }
 `}}></script>
+
     </Head>
     <div className='bg-slate-950 min-h-screen text-slate-200 px-4'>
       <div className='flex justify-center'>
