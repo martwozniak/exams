@@ -35,6 +35,34 @@ export const questionRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.question.findMany();
   }),
+  getRandomOne: publicProcedure.input(z.object({ numberOfQuestions: z.number()})).query(({ ctx,input }) => {
+    const questionLimit  = Number(input.numberOfQuestions);
+    const countAllquestions = ctx.prisma.question.count();
+
+    //const randomQuestion = Number(Math.floor(Math.random() * Number(countAllquestions)));
+    const randomQuestion = 1;
+    return ctx.prisma.question.findMany(
+      {
+        skip: randomQuestion,
+        take: questionLimit,
+        include: {answers: true},
+      }
+    );
+  }),
+  getNQuestions: publicProcedure.input(z.object({ numberOfQuestions: z.number()})).query(({ ctx,input }) => {
+    const questionLimit  = Number(input.numberOfQuestions);
+    const countAllquestions = ctx.prisma.question.count();
+
+    //const randomQuestion = Number(Math.floor(Math.random() * Number(countAllquestions)));
+    const randomQuestion = 1;
+    return ctx.prisma.question.findMany(
+      {
+        skip: randomQuestion,
+        take: questionLimit,
+        include: {answers: true},
+      }
+    );
+  }),
   getOne: publicProcedure.input(z.object({ slug: z.string()})).query(({ ctx, input }) => {
     const slug = input.slug;
     return ctx.prisma.question.findUnique({

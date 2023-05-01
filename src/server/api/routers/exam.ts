@@ -21,6 +21,16 @@ export const examRouter = createTRPCRouter({
   // return  questions;
     //return ctx.prisma.question.findMany();
   }),
+  getNQuestionsAndAnswers: publicProcedure.input(z.object({ numberOfQuestions: z.number()})).query(({ ctx,input }) => {
+    const questionLimit  = Number(input.numberOfQuestions);
+    const countAllquestions = ctx.prisma.question.count();
+
+    const questions = ctx.prisma.question.findMany({
+      take: questionLimit,
+      include: {answers: true}});
+    return questions;
+
+  }),
 
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
