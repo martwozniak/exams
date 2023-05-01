@@ -6,6 +6,8 @@ import { PieChart, Pie, Sector, Cell, ResponsiveContainer, AreaChart, XAxis, Car
 import dayjs from 'dayjs';
 import ReactPDF from '@react-pdf/renderer';
 import Clipboard from 'react-clipboard.js';
+import { AiFillFacebook, AiFillYoutube,AiFillInstagram, AiFillTwitterSquare, AiFillGoogleCircle } from "react-icons/ai";
+import { BsDiscord, BsMailbox, BsDownload } from "react-icons/bs";
 
 type Props = {
     title: string;
@@ -40,6 +42,7 @@ export default function ResultPopover({title,description, points, maxPoints, tim
   const toastSuccessCopied = () => toast.success("Copied to clipboard");
 
   return (
+    <>
     <div className='flex items-center justify-center sm:mx-4 pb-12'>
     <div className='transition-all w-full flex items-center justify-center min-h-3xl flex-col bg-slate-950/80'>
       
@@ -105,8 +108,41 @@ export default function ResultPopover({title,description, points, maxPoints, tim
               <span>
                 Follow our Social Media
               </span>
+              <div className='flex gap-2 text-slate-800'>
+                <a href="https://www.facebook.com/">
+                  <AiFillFacebook className='text-3xl cursor-pointer transition-all hover:text-slate-50'/>
+                </a>
+                <a href="https://www.instagram.com/">
+                  <AiFillInstagram className='text-3xl cursor-pointer transition-all hover:text-slate-50'/>
+                </a>
+                <a href="https://www.twitter.com/">
+                  <AiFillTwitterSquare className='text-3xl cursor-pointer transition-all hover:text-slate-50'/>
+                </a>
+                <a href="https://www.youtube.com/">
+                  <AiFillYoutube className='text-3xl cursor-pointer transition-all hover:text-slate-50'/>
+                </a>
+                <a href="https://www.discord.com/">
+                  <BsDiscord className='text-3xl cursor-pointer transition-all hover:text-slate-50'/>
+                </a>
+              </div>
+              <div className='flex gap-2 items-center'>
+                  <span>Send</span>
+                  <div>
+                    <a href="https://www.gmail.com/">
+                      <BsMailbox className='text-3xl text-slate-800 cursor-pointer transition-all hover:text-slate-50'/>
+                    </a>
+                  </div>
+                  <span>Download</span>
+                  <div>
+                    <a href="https://www.gmail.com/">
+                      <BsDownload className='text-2xl text-slate-800 cursor-pointer transition-all hover:text-slate-50'/>
+                    </a>
+                  </div>
+              </div>
+              </div>
+     
               <div>
-
+         
               </div>
               </div>
               
@@ -183,7 +219,7 @@ export default function ResultPopover({title,description, points, maxPoints, tim
              
             </div>
         </div>
-    </div></div>
+    </div></>
   )
 }
 
