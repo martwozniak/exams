@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { api } from "../../utils/api";
 import Head from 'next/head';
 import { Answer, Question } from '@prisma/client';
+import Link from 'next/link';
+import CTA from '~/components/CTA/CTA';
 const ALPHABET = ["A","B","C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"];
 
 export default function ShowSingleQuestion() {
@@ -39,6 +41,16 @@ export default function ShowSingleQuestion() {
       return(a.body);
     }
   });
+
+  const questionExamIdentifier = dataIsLoaded ? singleQuestionQuery.data?.examId : "0";
+  // Find related questions with the same examId
+  const relatedQuestionsQuery = api.question.getManyRandomRecommendation.useQuery({ examID: String(questionExamIdentifier) }, {
+    onSuccess: (data) => {
+      console.log("Data related to id", data);
+    }
+  });
+  console.log("Related questions", relatedQuestionsQuery?.data)
+
 
   return (
     <>
@@ -82,6 +94,35 @@ export default function ShowSingleQuestion() {
               }}>Show correct answer</button>
           </div>
       </div>
+      <div className='mt-4 px-4 flex flex-col gap-4 justify-center items-center'>
+        <div className='container'>
+        <span>Podobne pytania</span>
+        <div>
+        {/* {relatedQuestionsQuery?.data?.body.map((a, iterator) => (
+        
+        <div key={a.identifier} id={`div-${a.identifier}`} className="px-2  transition-all py-2 rounded-xl cursor-pointer focus:text-white">
+          <label htmlFor={`answer-${a.identifier}`}>{`${ALPHABET[iterator]!.toLowerCase()})`} {a.body}</label>
+        </div>
+        
+      ))} */}
+
+      {
+        relatedQuestionsQuery?.data?.map((q : Question) => (
+          <div key={q.id} className='cursor-pointer'>
+          <Link href={`/question/${q.id}`} key={q.id} className='cursor-pointer'>
+            <div key={q.id} className="cursor-pointer transition-all py-2 rounded-xl cursor-pointer text-slate-600 hover:text-slate-200 transition-all focus:text-white">
+              <label htmlFor={`answer-${q.id}`} className='cursor-pointer'>{q.body}</label>
+            </div>
+          </Link>
+          </div>
+        ))
+      }
+        </div>
+        </div>
+      </div>
+    
+      <CTA/>
+
     </div>
     </>
   )

@@ -208,6 +208,7 @@ const Home: NextPage = () => {
 
       
         <div className="hero flex items-center justify-center text-white py-4">
+     
         <div className="CTA-HERO text-slate-200 mt-0 sm:mt-2 mx-4 sm:mx-0">
             <h1 className="text-2xl sm:text-6xl font-bold">Begin your niskopoziomowe journey 😊</h1>
             <i>Make niskopoziomowe great again</i>

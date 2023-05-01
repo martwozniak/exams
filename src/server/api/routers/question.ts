@@ -41,7 +41,17 @@ export const questionRouter = createTRPCRouter({
       where: { id: slug },
       include: {answers: true},
     });
-
+  }),
+  getManyRandomRecommendation: publicProcedure.input(z.object({ examID: z.string() })).query(({ ctx, input }) => {
+    const singleExamId = input.examID;
+    // TODO: Uncomment and add randomization after database will be filled with questions
+//    const examsCount = ctx.prisma.exam.count();
+//    const skip = Number(Math.floor(Number(Math.random()) * Number(examsCount)));
+    return ctx.prisma.question.findMany({
+      take: 25,
+//
+      where: { examId: singleExamId },
+    });
   }),
   reportQuestionIssue: publicProcedure
   .input(z.object({ reportedQuestionId: z.string(), token: z.string() }))
