@@ -209,8 +209,8 @@ const Home: NextPage = () => {
                     <div key={a.identifier} onClick={
                       () => IsCorrect(a.identifier, a.isCorrect, q.id, iterator)
                     }  id={`div-${a.identifier}`} className="px-2  transition-all py-2 rounded-xl cursor-pointer focus:text-white">
-                      <input type="radio" name={q.id} value={a.identifier} id={`answer-${a.identifier}`}  className="mr-2" />
-                      <label htmlFor={`answer-${a.identifier}`}>{a.body}</label>
+                      <input type="radio" name={q.id} value={a.identifier} id={`answer-${a.identifier}`}  className="mr-2 cursor-pointer" />
+                      <label htmlFor={`answer-${a.identifier}`} className="cursor-pointer">{a.body}</label>
                     </div>
                   ))}
 
