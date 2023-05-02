@@ -1,19 +1,18 @@
 import { type NextPage } from 'next';
 import Head from 'next/head';
-import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
-import { api } from '~/utils/api';
-import { useEffect, useState } from 'react';
 import type { FormEvent, MouseEventHandler } from 'react';
+import { useEffect, useState } from 'react';
 import LoadingIndicator from '~/components/LoadingIndicator/LoadingIndicator';
+import { api } from '~/utils/api';
 
-import StatsBar from '~/components/StatsBar/StatsBar';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import toast from 'react-hot-toast';
 import { MdReportProblem } from 'react-icons/md';
 import ResultPopover from '~/components/ResultPopover/ResultPopover';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import StatsBar from '~/components/StatsBar/StatsBar';
 
 dayjs.extend(relativeTime);
 
@@ -300,3 +299,64 @@ const Home: NextPage = () => {
   );
 };
 export default Home;
+
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const { examToken } = context.query;
+//   const { data: exam } = await api.exam.getExam({
+//     examId: examToken as string,
+//   });
+//   const { data: questions } = await api.question.getQuestions({
+//     examId: examToken as string,
+//   });
+//   const { data: answers } = await api.answer.getAnswers({
+//     examId: examToken as string,
+//   });
+//   const { data: userAnswers } = await api.answer.getUserAnswers({
+//     examId: examToken as string,
+//   });
+//   const { data: user } = await api.user.getUser({
+//     userId: exam?.userId as string,
+//   });
+//   const { data: userExam } = await api.user.getUserExam({
+//     userId: exam?.userId as string,
+//     examId: examToken as string,
+//   });
+//   const { data: userExamAnswers } = await api.user.getUserExamAnswers({
+//     userId: exam?.userId as string,
+//     examId: examToken as string,
+//   });
+//   const { data: userExamQuestions } = await api.user.getUserExamQuestions({
+//     userId: exam?.userId as string,
+//     examId: examToken as string,
+//   });
+//   const { data: userExamQuestionAnswers } =
+//     await api.user.getUserExamQuestionAnswers({
+//       userId: exam?.userId as string,
+//       examId: examToken as string,
+//     });
+//   const { data: userExamQuestionAnswersCorrect } =
+//     await api.user.getUserExamQuestionAnswersCorrect({
+//       userId: exam?.userId as string,
+//       examId: examToken as string,
+//     });
+//   const { data: userExamQuestionAnswersIncorrect } =
+//     await api.user.getUserExamQuestionAnswersIncorrect({
+//       userId: exam?.userId as string,
+//       examId: examToken as string,
+//     });
+//   const { data: userExamQuestionAnswersNotAnswered } =
+//     await api.user.getUserExamQuestionAnswersNotAnswered({
+//       userId: exam?.userId as string,
+//       examId: examToken as string,
+//     });
+//   }
+//   return {
+//     props: {
+//       exam,
+//       questions,
+//       answers,
+//       userAnswers,
+//       user,
+//       userExam,
+//       userExamAnswers,
+//       userExamQuestions,
