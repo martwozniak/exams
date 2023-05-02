@@ -1,14 +1,13 @@
-import React from 'react';
-import './StatsBar.module.css';
-import {
-  MdBrowseGallery,
-  MdOutlineIncompleteCircle,
-  MdOutlineDiamond,
-  MdLocalFireDepartment,
-  MdOutlineDateRange,
-} from 'react-icons/md';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import {
+  MdBrowseGallery,
+  MdLocalFireDepartment,
+  MdOutlineDateRange,
+  MdOutlineDiamond,
+  MdOutlineIncompleteCircle,
+} from 'react-icons/md';
+import './StatsBar.module.css';
 
 dayjs.extend(relativeTime);
 
@@ -30,11 +29,9 @@ export default function StatsBar({
   maxAnswers,
   userPoints,
   progressPercent,
-  timeOut,
   timeStarted,
   pauseCountdown,
   timeEnded,
-  finalTime,
   duration,
 }: Props) {
   const timeLeft = !pauseCountdown

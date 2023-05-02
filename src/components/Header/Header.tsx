@@ -1,11 +1,12 @@
-import Link from 'next/link';
-import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { MdOutlineDiamond } from 'react-icons/md';
 
 export default function Header() {
   //const [session, loading] = useSession();
-  const [isLogged, setIsLogged] = React.useState(true);
+  //const [isLogged, setIsLogged] = React.useState(true);
+  const isLogged = true;
+
   return (
     <>
       <div className="header text-whit flex items-center justify-center bg-slate-950 py-4">

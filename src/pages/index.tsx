@@ -2,7 +2,7 @@ import { type GetServerSidePropsContext, type NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import type { FormEvent, MouseEventHandler } from 'react';
+import { type FormEvent, type MouseEventHandler } from 'react';
 import { useEffect, useState } from 'react';
 import LoadingIndicator from '~/components/LoadingIndicator/LoadingIndicator';
 import { api } from '~/utils/api';
@@ -21,16 +21,20 @@ type ServerGeneratedStarterProps = {
 };
 
 const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
-  const startTime = serverStartTime;
+  const [startTime, setStartTime] = useState<number>(0);
+
+  useEffect(() => {
+    setStartTime(serverStartTime);
+  }, []);
   // get answers related to question
   const questions = api.exam.getAllQuestionsAndAnswers.useQuery();
 
   const duration = 60 * 1 * 1000; // 1 minutes
   // const [startTime, setStartTime] = useState(Date.now());
   const [endTime, setEndTime] = useState(0);
-  const [finalTime, setFinalTime] = useState(Date.now() + duration);
+  const finalTime = Date.now() + duration;
 
-  const [timeLeft, setTimeLeft] = useState(finalTime - Date.now());
+  const [timeLeft, setTimeLeft] = useState<number>(finalTime - Date.now());
   const timeOut = Number(timeLeft) < 0.0;
 
   const [pauseCountdown, setPauseCountdown] = useState(false);
@@ -49,9 +53,8 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
         setTimeLeft(finalTime - Date.now());
       }
     }, 1000);
-  }, []);
+  }, [finalTime, pauseCountdown]);
 
-  const [examDuration, setExamDuration] = useState(duration);
   const [examToken, setExamToken] = useState('');
 
   const questionList = questions.data;
@@ -62,9 +65,9 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
   const [answerCounter, setAnswerCounter] = useState(0);
   const maxAnswers = questionList?.length;
   const [progressPercent, setProgressPercent] = useState(0.0);
-  const [examStarted, setExamStarted] = useState(false);
+  // const [examStarted, setExamStarted] = useState(false); // TODO: Popup to start exam with info related to number of questions user want to have, started exam idication
   const [examFinished, setExamFinished] = useState(false);
-  const [examId, setExamId] = useState('');
+
   const answerToken = 'tkn';
   const router = useRouter();
 
@@ -140,14 +143,6 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
       if (!answersId.disabled && answersId != null) {
         answersId.checked = true;
         correctAnswer?.classList.add('bg-red-500');
-        // find correct answer add green colo
-        const correctAnswerId = `answer-${String(
-          questions.data
-            ?.find((q) => q.id == qId)
-            ?.answers.find((a) => a.isCorrect == true)?.identifier
-        )}`;
-        const correctAnswerDivId = 'div-' + correctAnswerId;
-        // const correctAnswerDiv = document.getElementById(correctAnswerDivId);
       }
       const correct = questionList
         ?.find((q) => q.id == qId)
@@ -173,15 +168,14 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
     if (!event.target) return;
   };
 
-  const { mutate, isLoading: isSendingQuestionIssueReport } =
-    api.question.reportQuestionIssue.useMutation({
-      onSuccess: () => {
-        toast.success('Thank you for your feedback! 😊');
-      },
-      onError: () => {
-        toast.error('Something went wrong, please try again later 😢');
-      },
-    });
+  const { mutate } = api.question.reportQuestionIssue.useMutation({
+    onSuccess: () => {
+      toast.success('Thank you for your feedback! 😊');
+    },
+    onError: () => {
+      toast.error('Something went wrong, please try again later 😢');
+    },
+  });
 
   return (
     <>
@@ -217,7 +211,7 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
                         <div>{q.body}</div>
                         <div
                           onClick={() => {
-                            const issueReportResult = mutate({
+                            mutate({
                               reportedQuestionId: q.id,
                               token: examToken,
                             });
@@ -306,7 +300,9 @@ export default Home;
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const simulate = await new Promise((resolve) => setTimeout(resolve, 1));
   const session = 1; //await getServerAuthSession(ctx);
-
+  console.log(simulate);
+  console.log(session);
+  console.log(ctx);
   // if (!session) {
   //   return {
   //     redirect: {
@@ -315,10 +311,11 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   //     },
   //   };
   // }
+  const date = Date.now();
 
   return {
     props: {
-      serverStartTime: Date.now(),
+      serverStartTime: date,
     },
   };
 }

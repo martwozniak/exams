@@ -1,35 +1,31 @@
 import { type NextPage } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
-import { signIn, signOut, useSession } from 'next-auth/react';
+
 import { useRouter } from 'next/router';
 
-import { api } from '~/utils/api';
+import { type FormEvent, type MouseEventHandler } from 'react';
 import { useEffect, useState } from 'react';
-import type { FormEvent, MouseEventHandler } from 'react';
 import LoadingIndicator from '~/components/LoadingIndicator/LoadingIndicator';
+import { api } from '~/utils/api';
 
-import StatsBar from '~/components/StatsBar/StatsBar';
-import toast from 'react-hot-toast';
-import { MdReportProblem } from 'react-icons/md';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import toast from 'react-hot-toast';
+import { MdReportProblem } from 'react-icons/md';
 import CTA from '~/components/CTA/CTA';
+import StatsBar from '~/components/StatsBar/StatsBar';
 
 dayjs.extend(relativeTime);
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: 'from tRPC' });
-  // get answers related to question
   const questions = api.exam.getNQuestionsAndAnswers.useQuery({
     numberOfQuestions: 1,
   });
 
-  const exams = api.exam.getAllExams.useQuery();
   const duration = 60 * 1 * 1000; // 1 minutes
-  const [startTime, setStartTime] = useState(Date.now());
+  const startTime = Date.now();
   const [endTime, setEndTime] = useState(0);
-  const [finalTime, setFinalTime] = useState(Date.now() + duration);
+  const finalTime = Date.now() + duration;
 
   const [timeLeft, setTimeLeft] = useState(finalTime - Date.now());
   const timeOut = Number(timeLeft) < 0.0;
@@ -45,21 +41,17 @@ const Home: NextPage = () => {
     }, 1000);
   }, []);
 
-  const [examDuration, setExamDuration] = useState(duration);
   const [examToken, setExamToken] = useState('');
 
   const questionList = questions.data;
-
-  const userAnswers = [];
 
   const [userPoints, setUserPoints] = useState(0);
   const [answerCounter, setAnswerCounter] = useState(0);
   const maxAnswers = questionList?.length;
   const [progressPercent, setProgressPercent] = useState(0.0);
-  const [examStarted, setExamStarted] = useState(false);
+  //const [examStarted, setExamStarted] = useState(false);
   const [examFinished, setExamFinished] = useState(false);
-  const [examId, setExamId] = useState('');
-  const answerToken = 'tkn';
+
   const router = useRouter();
 
   // use effect every second
@@ -77,8 +69,6 @@ const Home: NextPage = () => {
       Math.random().toString(36).substring(2, 15);
     localStorage.setItem('examToken', examToken);
     setExamToken(localStorage.getItem('examToken') || '');
-    // starting time
-    const setStartTime = dayjs();
   }, []);
 
   const IsCorrect = (
@@ -134,13 +124,6 @@ const Home: NextPage = () => {
         answersId.checked = true;
         correctAnswer?.classList.add('bg-red-500');
         // find correct answer add green colo
-        const correctAnswerId = `answer-${String(
-          questions.data
-            ?.find((q) => q.id == qId)
-            ?.answers.find((a) => a.isCorrect == true)?.identifier
-        )}`;
-        const correctAnswerDivId = 'div-' + correctAnswerId;
-        const correctAnswerDiv = document.getElementById(correctAnswerDivId);
       }
       const correct = questionList
         ?.find((q) => q.id == qId)
@@ -162,15 +145,14 @@ const Home: NextPage = () => {
     if (!event.target) return;
   };
 
-  const { mutate, isLoading: isSendingQuestionIssueReport } =
-    api.question.reportQuestionIssue.useMutation({
-      onSuccess: () => {
-        toast.success('Thank you for your feedback! 😊');
-      },
-      onError: () => {
-        toast.error('Something went wrong, please try again later 😢');
-      },
-    });
+  const { mutate } = api.question.reportQuestionIssue.useMutation({
+    onSuccess: () => {
+      toast.success('Thank you for your feedback! 😊');
+    },
+    onError: () => {
+      toast.error('Something went wrong, please try again later 😢');
+    },
+  });
 
   return (
     <>
@@ -206,7 +188,7 @@ const Home: NextPage = () => {
                         <div>{q.body}</div>
                         <div
                           onClick={() => {
-                            const issueReportResult = mutate({
+                            mutate({
                               reportedQuestionId: q.id,
                               token: examToken,
                             });

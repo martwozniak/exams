@@ -1,48 +1,36 @@
-import React, { ReactNode } from 'react';
-import Header from '../Header/Header';
-import {
-  MdBrowseGallery,
-  MdOutlineIncompleteCircle,
-  MdContentCopy,
-  MdOutlineDiamond,
-  MdLocalFireDepartment,
-  MdOutlineDateRange,
-  MdIncompleteCircle,
-  MdOutlineDownloadForOffline,
-} from 'react-icons/md';
+import dayjs from 'dayjs';
+import Image from 'next/image';
+import Clipboard from 'react-clipboard.js';
 import toast from 'react-hot-toast';
 import {
-  PieChart,
-  Pie,
-  Sector,
-  Cell,
-  ResponsiveContainer,
-  AreaChart,
-  XAxis,
-  CartesianGrid,
-  Tooltip,
-  YAxis,
-  Area,
-  BarChart,
-  Legend,
-  Bar,
-} from 'recharts';
-import dayjs from 'dayjs';
-import ReactPDF from '@react-pdf/renderer';
-import Clipboard from 'react-clipboard.js';
-import {
   AiFillFacebook,
-  AiFillYoutube,
   AiFillInstagram,
   AiFillTwitterSquare,
-  AiOutlineClockCircle,
-  AiFillGoogleCircle,
+  AiFillYoutube,
   AiOutlineCheckCircle,
+  AiOutlineClockCircle,
   AiOutlineCloseCircle,
 } from 'react-icons/ai';
-import { BsDiscord, BsPercent, BsMailbox, BsDownload } from 'react-icons/bs';
 import { BiMailSend } from 'react-icons/bi';
-import { FaRegCopy } from 'react-icons/fa';
+import { BsDiscord, BsPercent } from 'react-icons/bs';
+import {
+  MdBrowseGallery,
+  MdContentCopy,
+  MdIncompleteCircle,
+  MdLocalFireDepartment,
+  MdOutlineDiamond,
+  MdOutlineDownloadForOffline,
+} from 'react-icons/md';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  XAxis,
+  YAxis,
+} from 'recharts';
 interface UserAnswers {
   id: number;
   qId: string;
@@ -69,14 +57,10 @@ type Props = {
 // TODO: If not logged in show CTA to create account or log in
 
 export default function ResultPopover({
-  title,
-  description,
   points,
   maxPoints,
-  timeOut,
   answerCounter,
   examId,
-  token,
   timeStarted,
   timeEnded,
   finalTime,
@@ -88,7 +72,6 @@ export default function ResultPopover({
     { name: 'Wrong', value: Number(wrong), color: 'red' },
   ];
 
-  const totalTime = finalTime - timeStarted;
   const examGeneratedLink = `${window.location.hostname}/results/${examId}`;
 
   const toastSuccessCopied = () => toast.success('Copied to clipboard');
@@ -104,7 +87,7 @@ export default function ResultPopover({
             </div>
 
             <div className="mt-2 flex flex-col sm:container sm:mt-6">
-              <div className="flex flex-col justify-around gap-2 rounded-xl border border-slate-800 py-2 py-4 pl-4 text-xs sm:flex-row ">
+              <div className="flex flex-col justify-around gap-2 rounded-xl border border-slate-800 py-4 pl-4 text-xs sm:flex-row ">
                 <div className="flex flex-col gap-2">
                   <span className="font-bold">Exam ID</span>
                   <span className="font-bold">{examId}</span>
@@ -130,7 +113,7 @@ export default function ResultPopover({
                   </span>
                 </div>
               </div>
-              <div className="mt-8 flex justify-around gap-4 rounded-xl border border-slate-800 py-4 py-8">
+              <div className="mt-8 flex justify-around gap-4 rounded-xl border border-slate-800 py-8">
                 <div className="flex flex-col items-center justify-center">
                   <BsPercent className="text-xl" />
                   <span className="text-xl font-bold  sm:text-3xl">
@@ -180,7 +163,7 @@ export default function ResultPopover({
                 </div>
               </div>
 
-              <div className="mt-8 flex justify-around gap-4 rounded-xl border border-slate-800 py-4 py-8">
+              <div className="mt-8 flex justify-around gap-4 rounded-xl border border-slate-800 py-8">
                 <div className="flex flex-col items-center justify-center">
                   <MdBrowseGallery className="text-xl" />
                   <span className="text-xl font-bold  sm:text-3xl">
@@ -207,7 +190,7 @@ export default function ResultPopover({
                 </div>
               </div>
 
-              <div className="mx-2 mt-6 flex flex flex-col items-center gap-4 xl:flex-row">
+              <div className="mx-2 mt-6 flex flex-col items-center gap-4 xl:flex-row">
                 <span>Share your results</span>
 
                 <Clipboard
@@ -385,29 +368,31 @@ const getExamResult = (
 
 const getAnimatedImage = (points: number, maxPoints: number) => {
   const examResult = getExamResult(points, maxPoints, true);
-  if (examResult === 'Passed') {
+  const animatedImage = (imageUrl: string) => {
+    const image = `${imageUrl}`;
     return (
-      <img
-        src="https://media.tenor.com/r1hf8zhfBskAAAAM/jerry-springer-talk.gif"
-        alt="Meme"
-        className="mt-6 w-full"
-      />
+      <>
+        <Image
+          src={image}
+          alt="Meme"
+          className="mt-6 w-full"
+          width={100}
+          height={100}
+        />
+      </>
+    );
+  };
+  if (examResult === 'Passed') {
+    return animatedImage(
+      'https://media.tenor.com/r1hf8zhfBskAAAAM/jerry-springer-talk.gif'
     );
   } else if (examResult === 'Failed') {
-    return (
-      <img
-        src="https://media.tenor.com/Ovl6WVOhOSMAAAAC/try-again.gif"
-        alt="Meme"
-        className="mt-6 w-full"
-      />
+    return animatedImage(
+      'https://media.tenor.com/Ovl6WVOhOSMAAAAC/try-again.gif'
     );
   } else {
-    return (
-      <img
-        src="https://media.tenor.com/pQ7kmYSBiZIAAAAC/bkrafty-bkraftyerror.gif"
-        alt="Meme"
-        className="mt-6 w-full"
-      />
+    return animatedImage(
+      'https://media.tenor.com/pQ7kmYSBiZIAAAAC/bkrafty-bkraftyerror.gif'
     );
   }
 };

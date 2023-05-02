@@ -2,9 +2,10 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { api } from '../../utils/api';
 import Head from 'next/head';
-import { Answer, Question } from '@prisma/client';
+import { type Answer, type Question } from '@prisma/client';
 import Link from 'next/link';
 import CTA from '~/components/CTA/CTA';
+
 const ALPHABET = [
   'A',
   'B',
@@ -31,6 +32,7 @@ export default function ShowSingleQuestion() {
     {
       onSuccess: (data) => {
         setDataIsLoaded(true);
+        console.log('Data', data);
       },
     }
   );

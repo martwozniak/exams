@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { type NextApiRequest, type NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   let ip;
@@ -11,8 +11,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     ip = req.connection.remoteAddress;
   }
 
-  console.log(ip);
-
-  console.log(ip);
   res.status(200).json({ ipAddress: ip });
 }
