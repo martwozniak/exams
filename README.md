@@ -1,12 +1,14 @@
-# Create T3 App
+<img src="https://raw.githubusercontent.com/martwozniak/exams/c080b48b6f90627885ec1bb760cdc473251d9179/public/assets/logo.svg" alt="Project logo">
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+# Exams - Online Examination Platform
 
-## What's next? How do I make an app with this?
+Welcome to our online examination platform, a web application designed to help students and professionals take exams and quizzes from the comfort of their homes or offices. Our platform offers a range of features, including points and achievements, to enhance the user experience and encourage users to keep learning and improving.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+This application was created using [create-t3-app](https://create.t3.gg/), a tool that helps developers quickly set up a modern web application using React, TypeScript, and Tailwind CSS. With this tool, we were able to focus on building the core features of our online examination platform without worrying too much about the setup and configuration of our development environment.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+In this repository, you'll find all the code necessary to run our online examination platform locally or deploy it to a hosting provider of your choice. We hope you find this application useful and that it helps you achieve your learning goals.
+
+## tech stack
 
 - [Next.js](https://nextjs.org)
 - [NextAuth.js](https://next-auth.js.org)
@@ -14,15 +16,10 @@ If you are not familiar with the different technologies used in this project, pl
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
-## Learn More
+## getting started
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+To get started with our online examination platform, you'll need to follow a few simple steps to install and set up the application on your local machine. First, make sure you have Node.js and yarn (Node Package Manager) installed on your computer. Then, clone this repository to your local machine using the git clone command.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Next, navigate to the root directory of the application in your terminal and run the command yarn install to install all the necessary dependencies. Once the installation is complete, you can start the development server by running yarn dev. This will launch the application in your default web browser, and you can begin exploring its features and functionality.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+If you want to build the production-ready version of the application, you can run the command yarn build. This will create a production build of the application that can be deployed to a hosting provider of your choice. Overall, the installation process is straightforward and should only take a few minutes to complete.
