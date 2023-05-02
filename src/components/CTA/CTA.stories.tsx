@@ -3,14 +3,12 @@
 import type { Meta } from '@storybook/react';
 import CTA from './CTA';
 
-
 const meta: Meta<typeof CTA> = {
   title: 'CTA',
   component: CTA,
 };
 
 export default meta;
-
 
 /*
  *👇 Render functions are a framework specific feature to allow you control on how the component renders.

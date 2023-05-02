@@ -1,14 +1,14 @@
-import { type Config } from "tailwindcss";
+import { type Config } from 'tailwindcss';
 
 export default {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {},
   },
   variants: {
     extend: {
-        display: ["group-hover"],
+      display: ['group-hover'],
     },
-},
+  },
   plugins: [],
 } satisfies Config;
