@@ -1,4 +1,4 @@
-import { type NextPage } from 'next';
+import { type GetServerSidePropsContext, type NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
@@ -16,12 +16,17 @@ import StatsBar from '~/components/StatsBar/StatsBar';
 
 dayjs.extend(relativeTime);
 
-const Home: NextPage = () => {
+type ServerGeneratedStarterProps = {
+  serverStartTime: number;
+};
+
+const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
+  const startTime = serverStartTime;
   // get answers related to question
   const questions = api.exam.getAllQuestionsAndAnswers.useQuery();
 
   const duration = 60 * 1 * 1000; // 1 minutes
-  const [startTime, setStartTime] = useState(Date.now());
+  // const [startTime, setStartTime] = useState(Date.now());
   const [endTime, setEndTime] = useState(0);
   const [finalTime, setFinalTime] = useState(Date.now() + duration);
 
@@ -78,8 +83,6 @@ const Home: NextPage = () => {
       Math.random().toString(36).substring(2, 15);
     localStorage.setItem('examToken', examToken);
     setExamToken(localStorage.getItem('examToken') || '');
-    // starting time
-    const setStartTime = dayjs();
   }, []);
 
   const IsCorrect = (
@@ -300,63 +303,22 @@ const Home: NextPage = () => {
 };
 export default Home;
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const { examToken } = context.query;
-//   const { data: exam } = await api.exam.getExam({
-//     examId: examToken as string,
-//   });
-//   const { data: questions } = await api.question.getQuestions({
-//     examId: examToken as string,
-//   });
-//   const { data: answers } = await api.answer.getAnswers({
-//     examId: examToken as string,
-//   });
-//   const { data: userAnswers } = await api.answer.getUserAnswers({
-//     examId: examToken as string,
-//   });
-//   const { data: user } = await api.user.getUser({
-//     userId: exam?.userId as string,
-//   });
-//   const { data: userExam } = await api.user.getUserExam({
-//     userId: exam?.userId as string,
-//     examId: examToken as string,
-//   });
-//   const { data: userExamAnswers } = await api.user.getUserExamAnswers({
-//     userId: exam?.userId as string,
-//     examId: examToken as string,
-//   });
-//   const { data: userExamQuestions } = await api.user.getUserExamQuestions({
-//     userId: exam?.userId as string,
-//     examId: examToken as string,
-//   });
-//   const { data: userExamQuestionAnswers } =
-//     await api.user.getUserExamQuestionAnswers({
-//       userId: exam?.userId as string,
-//       examId: examToken as string,
-//     });
-//   const { data: userExamQuestionAnswersCorrect } =
-//     await api.user.getUserExamQuestionAnswersCorrect({
-//       userId: exam?.userId as string,
-//       examId: examToken as string,
-//     });
-//   const { data: userExamQuestionAnswersIncorrect } =
-//     await api.user.getUserExamQuestionAnswersIncorrect({
-//       userId: exam?.userId as string,
-//       examId: examToken as string,
-//     });
-//   const { data: userExamQuestionAnswersNotAnswered } =
-//     await api.user.getUserExamQuestionAnswersNotAnswered({
-//       userId: exam?.userId as string,
-//       examId: examToken as string,
-//     });
-//   }
-//   return {
-//     props: {
-//       exam,
-//       questions,
-//       answers,
-//       userAnswers,
-//       user,
-//       userExam,
-//       userExamAnswers,
-//       userExamQuestions,
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const simulate = await new Promise((resolve) => setTimeout(resolve, 1));
+  const session = 1; //await getServerAuthSession(ctx);
+
+  // if (!session) {
+  //   return {
+  //     redirect: {
+  //       destination: '/',
+  //       permanent: false,
+  //     },
+  //   };
+  // }
+
+  return {
+    props: {
+      serverStartTime: Date.now(),
+    },
+  };
+}
