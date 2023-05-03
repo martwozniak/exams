@@ -31,6 +31,7 @@
     "eslint-plugin-isaacscript": "^2.6.7",
     "eslint-plugin-prettier": "^4.2.1",
     "fireworks-js": "^2.10.3",
+    "lint-staged": "^13.2.2",
     "moment": "^2.29.4",
     "next": "^13.2.4",
     "next-auth": "^4.21.0",

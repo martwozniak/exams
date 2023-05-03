@@ -221,12 +221,6 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
                           <MdReportProblem />
                         </div>
                       </div>
-                      {/** If question iterator % 3 then show component with CTA convincing people to create account,
-                       * if not then show question - include people who are not logging in, if person is loggin the not show it
-                       * TODO: Conditional rendering for persons who are logged in and not logged in
-                       * Logged In convince to spend more time on the website
-                       * Not logged in convince to create account
-                       */}
                       {q.answers.map((a) => (
                         <div
                           key={a.identifier}

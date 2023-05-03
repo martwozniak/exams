@@ -36,7 +36,6 @@ export default function Exams() {
         </div>
       </div>
 
-      {/** Every mod 6 show cta that will convince people that creating account is worth it!  */}
       <div className="flex justify-center">
         <div className="container grid grid-cols-2 items-center gap-4 py-6 text-slate-200">
           {exam.data?.questions.map((question) => (

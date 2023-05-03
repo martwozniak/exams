@@ -8,6 +8,7 @@ import {
   MdOutlineIncompleteCircle,
 } from 'react-icons/md';
 import './StatsBar.module.css';
+import { useEffect, useState } from 'react';
 
 dayjs.extend(relativeTime);
 
@@ -34,9 +35,24 @@ export default function StatsBar({
   timeEnded,
   duration,
 }: Props) {
-  const timeLeft = !pauseCountdown
-    ? timeStarted + duration - Date.now()
-    : timeEnded - timeStarted;
+  // const timeLeft = !pauseCountdown
+  //   ? timeStarted + duration - Date.now()
+  //   : timeEnded - timeStarted;
+  const [timeLeft, setTimeLeft] = useState<number>();
+  const [timeDiv, setTimeDiv] = useState<string>();
+  const [currentDate, setCurrentDate] = useState<string>();
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!pauseCountdown) {
+        setTimeLeft(timeStarted + duration - Date.now());
+        setTimeDiv(dayjs(timeLeft).format('mm:ss'));
+        setCurrentDate(dayjs(new Date()).format('MM.DD.YYYY HH:m'));
+      } else {
+        setTimeLeft(timeEnded - timeStarted);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timeDiv]);
 
   return (
     <>
@@ -46,17 +62,13 @@ export default function StatsBar({
             <div>
               <MdOutlineDateRange className="text-xl" />
             </div>
-            <p className="w-max text-slate-300">{`${dayjs(new Date()).format(
-              'MM.DD.YYYY HH:m'
-            )}`}</p>
+            <p className="w-max text-slate-300">{currentDate}</p>
           </div>
           <div className="flex w-24 w-fit items-center gap-2">
             <div>
               <MdBrowseGallery className="text-xl" />
             </div>
-            <p className="w-max text-slate-300">{`${dayjs(timeLeft).format(
-              'mm:ss'
-            )}`}</p>
+            <p className="w-max text-slate-300">{timeDiv}</p>
           </div>
           <div className="flex w-14  items-center gap-2">
             <div>
@@ -66,7 +78,7 @@ export default function StatsBar({
               {answerCounter}/{maxAnswers}
             </p>
           </div>
-          <div className="flex hidden w-14 items-center gap-2">
+          <div className="hidden w-14 items-center gap-2">
             <div>
               <MdLocalFireDepartment className="text-xl" />{' '}
             </div>

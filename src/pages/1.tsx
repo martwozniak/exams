@@ -166,7 +166,7 @@ const Home: NextPage = () => {
       <main className="main flex min-h-screen flex-col bg-slate-950 text-sm">
         <div className="blur-wrapper">
           <div className="hero flex items-center justify-center py-4 text-white">
-            <div className="CTA-HERO mx-4 mt-0 text-slate-200 sm:mx-0 sm:mt-2">
+            <div className="cta-hero mx-4 mt-0 text-slate-200 sm:mx-0 sm:mt-2">
               <h1 className="text-2xl font-bold sm:text-6xl">
                 Begin your niskopoziomowe journey 😊
               </h1>
@@ -175,7 +175,7 @@ const Home: NextPage = () => {
           </div>
           <div className="flex justify-center">
             <div className="container">
-              <form className="formExam text-slate-50" onSubmit={handleSubmit}>
+              <form className="form-exam text-slate-50" onSubmit={handleSubmit}>
                 {questions.isLoading ? (
                   <LoadingIndicator />
                 ) : (

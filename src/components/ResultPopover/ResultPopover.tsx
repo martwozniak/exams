@@ -126,7 +126,7 @@ export default function ResultPopover({
                 </div>
 
                 <div className="grid grid-cols-5 items-center gap-2">
-                  {/** List of all questions idicated by icons with color AiOutlineCheckCircle,AiOutlineClockCircle,AiOutlineCloseCircle  */}
+                  {/** List of all questions idicated by icons with color: AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlineCloseCircle.  */}
                   {userAnswers.map((answer, iterator) => {
                     if (answer.result === 1) {
                       return (
