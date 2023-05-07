@@ -5,6 +5,11 @@ import Head from 'next/head';
 import { type Answer, type Question } from '@prisma/client';
 import Link from 'next/link';
 import CTA from '~/components/CTA/CTA';
+import { type GetServerSidePropsContext, type NextPage } from 'next';
+
+type ServerGeneratedStarterProps = {
+  test: number;
+};
 
 const ALPHABET = [
   'A',
@@ -23,7 +28,10 @@ const ALPHABET = [
   'N',
 ];
 
-export default function ShowSingleQuestion() {
+const ShowSingleQuestion: NextPage<ServerGeneratedStarterProps> = ({
+  test,
+}) => {
+  console.log(test);
   const router = useRouter();
   const identifier = router.query.id! as string;
   const [dataIsLoaded, setDataIsLoaded] = useState(false);
@@ -169,4 +177,21 @@ export default function ShowSingleQuestion() {
       </div>
     </>
   );
+};
+
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const simulate = await new Promise((resolve) => setTimeout(resolve, 1));
+  const session = 1; //await getServerAuthSession(ctx);
+
+  console.log(simulate);
+  console.log(session);
+  console.log(ctx);
+
+  return {
+    props: {
+      test: 1,
+    },
+  };
 }
+
+export default ShowSingleQuestion;

@@ -6,7 +6,7 @@ export default function CTA() {
   return (
     <div className="CTA">
       <div className="my-6 flex flex-col justify-center sm:flex-row">
-        <div className="container  flex flex-col items-center gap-4 rounded-xl  border border-slate-800 sm:flex-row">
+        <div className="container  flex flex-col items-end gap-4 rounded-xl  border border-slate-800 sm:flex-row">
           <div className="mx-8 flex max-w-md flex-col gap-2 gap-2 py-4">
             <span className="text-3xl font-bold">Chcesz więcej?</span>
             <p>
