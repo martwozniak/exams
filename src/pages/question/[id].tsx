@@ -9,6 +9,7 @@ import { type GetServerSidePropsContext, type NextPage } from 'next';
 
 type ServerGeneratedStarterProps = {
   test: number;
+  questionIdentifier: string;
 };
 
 const ALPHABET = [
@@ -29,11 +30,9 @@ const ALPHABET = [
 ];
 
 const ShowSingleQuestion: NextPage<ServerGeneratedStarterProps> = ({
-  test,
+  questionIdentifier,
 }) => {
-  console.log(test);
-  const router = useRouter();
-  const identifier = router.query.id! as string;
+  const identifier = questionIdentifier as string;
   const [dataIsLoaded, setDataIsLoaded] = useState(false);
   const singleQuestionQuery = api.question.getOne.useQuery(
     { slug: identifier },
@@ -182,7 +181,7 @@ const ShowSingleQuestion: NextPage<ServerGeneratedStarterProps> = ({
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const simulate = await new Promise((resolve) => setTimeout(resolve, 1));
   const session = 1; //await getServerAuthSession(ctx);
-
+  const { id } = ctx.query;
   console.log(simulate);
   console.log(session);
   console.log(ctx);
@@ -190,6 +189,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   return {
     props: {
       test: 1,
+      questionIdentifier: id,
     },
   };
 }
