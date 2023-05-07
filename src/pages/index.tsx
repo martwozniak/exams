@@ -32,7 +32,7 @@ interface UserAnswers {
 const Home: NextPage<ServerGeneratedStarterProps> = ({
   serverStartTime,
   serverExamToken,
-  serverExamDuration
+  serverExamDuration,
 }) => {
   const [startTime, setStartTime] = useState<number>(0);
   const [examToken, setExamToken] = useState('');
