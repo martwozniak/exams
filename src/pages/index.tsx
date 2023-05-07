@@ -140,6 +140,10 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({
       if (!answersId.disabled && answersId != null) {
         answersId.checked = true;
         correctAnswer?.classList.add('bg-red-500');
+        setUserAnswers([
+          ...userAnswers,
+          { id: iterator, qId: qId, result: 0, userAnswerId: id },
+        ]);
       }
       const correct = questionList
         ?.find((q) => q.id == qId)
@@ -149,10 +153,6 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({
       const corAns = document.getElementById(correctDiv);
       corAns?.classList.add('bg-green-500');
       (corAns as HTMLButtonElement).disabled = true;
-      setUserAnswers([
-        ...userAnswers,
-        { id: iterator, qId: qId, result: 0, userAnswerId: id },
-      ]);
     }
     // Disable other options
     answers.forEach((answer) => {
