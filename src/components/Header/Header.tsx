@@ -12,7 +12,7 @@ export default function Header() {
       <div className="header text-whit flex items-center justify-center bg-slate-950 py-4">
         <div className="container flex flex-col justify-between px-4 text-slate-100 sm:flex-row">
           <div>
-            <Link href="/">
+            <Link href={'/'} as={'/'} replace passHref>
               <Image
                 src="/assets/logo.svg"
                 className="h-12 w-24"
