@@ -18,18 +18,33 @@ dayjs.extend(relativeTime);
 
 type ServerGeneratedStarterProps = {
   serverStartTime: number;
+  serverExamToken: string;
+  serverExamDuration: number;
 };
 
-const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
-  const [startTime, setStartTime] = useState<number>(0);
+interface UserAnswers {
+  id: number;
+  qId: string;
+  result: number;
+  userAnswerId: string;
+}
 
+const Home: NextPage<ServerGeneratedStarterProps> = ({
+  serverStartTime,
+  serverExamToken,
+  serverExamDuration
+}) => {
+  const [startTime, setStartTime] = useState<number>(0);
+  const [examToken, setExamToken] = useState('');
+  const [duration, setDuration] = useState(60); // 1 minutes
   useEffect(() => {
     setStartTime(serverStartTime);
+    setExamToken(serverExamToken);
+    setDuration(serverExamDuration);
   }, []);
   // get answers related to question
   const questions = api.exam.getAllQuestionsAndAnswers.useQuery();
 
-  const duration = 60 * 1 * 1000; // 1 minutes
   // const [startTime, setStartTime] = useState(Date.now());
   const [endTime, setEndTime] = useState(0);
   const finalTime = Date.now() + duration;
@@ -39,13 +54,6 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
 
   const [pauseCountdown, setPauseCountdown] = useState(false);
 
-  interface UserAnswers {
-    id: number;
-    qId: string;
-    result: number;
-    userAnswerId: string;
-  }
-
   // Update time interval
   useEffect(() => {
     setInterval(() => {
@@ -54,9 +62,6 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
       }
     }, 1000);
   }, [finalTime, pauseCountdown]);
-
-  const [examToken, setExamToken] = useState('');
-
   const questionList = questions.data;
 
   const [userAnswers, setUserAnswers] = useState<UserAnswers[]>([]); // {id: number, qId: string, result: number}[] = [];
@@ -79,14 +84,14 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({ serverStartTime }) => {
   }
 
   // useEffect one time after site is loaded
-  useEffect(() => {
-    const examToken =
-      Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 19) +
-      Math.random().toString(36).substring(2, 15);
-    localStorage.setItem('examToken', examToken);
-    setExamToken(localStorage.getItem('examToken') || '');
-  }, []);
+  // useEffect(() => {
+  //   const examToken =
+  //     Math.random().toString(36).substring(2, 15) +
+  //     Math.random().toString(36).substring(2, 19) +
+  //     Math.random().toString(36).substring(2, 15);
+  //   localStorage.setItem('examToken', examToken);
+  //   setExamToken(localStorage.getItem('examToken') || '');
+  // }, []);
 
   const IsCorrect = (
     id: string,
@@ -294,9 +299,16 @@ export default Home;
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const simulate = await new Promise((resolve) => setTimeout(resolve, 1));
   const session = 1; //await getServerAuthSession(ctx);
+  const examToken =
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 19) +
+    Math.random().toString(36).substring(2, 15);
   console.log(simulate);
   console.log(session);
   console.log(ctx);
+
+  const duration = 60 * 1 * 1000; // 1 minutes
+
   // if (!session) {
   //   return {
   //     redirect: {
@@ -310,6 +322,8 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   return {
     props: {
       serverStartTime: date,
+      serverExamToken: examToken,
+      serverExamDuration: duration,
     },
   };
 }
