@@ -37,11 +37,13 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({
   const [startTime, setStartTime] = useState<number>(0);
   const [examToken, setExamToken] = useState('');
   const [duration, setDuration] = useState(60); // 1 minutes
+
   useEffect(() => {
     setStartTime(serverStartTime);
     setExamToken(serverExamToken);
     setDuration(serverExamDuration);
   }, []);
+
   // get answers related to question
   const questions = api.exam.getAllQuestionsAndAnswers.useQuery();
 
@@ -82,16 +84,6 @@ const Home: NextPage<ServerGeneratedStarterProps> = ({
   if (finalTime == Date.now()) {
     setExamFinished(true);
   }
-
-  // useEffect one time after site is loaded
-  // useEffect(() => {
-  //   const examToken =
-  //     Math.random().toString(36).substring(2, 15) +
-  //     Math.random().toString(36).substring(2, 19) +
-  //     Math.random().toString(36).substring(2, 15);
-  //   localStorage.setItem('examToken', examToken);
-  //   setExamToken(localStorage.getItem('examToken') || '');
-  // }, []);
 
   const IsCorrect = (
     id: string,
