@@ -301,14 +301,6 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 
   const duration = 60 * 1 * 1000; // 1 minutes
 
-  // if (!session) {
-  //   return {
-  //     redirect: {
-  //       destination: '/',
-  //       permanent: false,
-  //     },
-  //   };
-  // }
   const date = Date.now();
 
   return {
